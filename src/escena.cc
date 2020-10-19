@@ -68,22 +68,30 @@ void Escena::dibujar()
     // y hacer
 	 if(comoPuntos){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		cubo->cambiaColor({1,0,0});
 		cubo->draw(modoDibujo );
 		tetraedro->draw(modoDibujo);
 	 }
 
 	 if(comoLineas){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		cubo->cambiaColor({0,1,0});
 		cubo->draw(modoDibujo);
 		tetraedro->draw(modoDibujo);
 	 }
 
 	 if(comoTriangulos){
+		cubo->cambiaColor({0,0,1});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		cubo->draw(modoDibujo);
 		tetraedro->draw(modoDibujo);
 	 }
 
+}
+
+void Escena::dibujaObjetos(){
+	cubo->draw(modoDibujo);
+	tetraedro->draw(modoDibujo);
 }
 
 //**************************************************************************
@@ -196,7 +204,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			break;
 		 case 'H':
 			cout<<"Usa la tecla O para seleccionar el objeto luego (C)ubo y (T)etraedro para las dos figuras"<<endl;
-			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas y S para dibujar las caras"<<endl;
+			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras"<<endl;
 			cout<<"La tecla D para el dibujado 1 para modo inmediato y 2 para modo deferido"<<endl;
 			break;
 

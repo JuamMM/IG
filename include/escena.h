@@ -51,6 +51,7 @@ class Escena
 
 	// Dibujar
 	void dibujar() ;
+	void dibujaObjetos();
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;

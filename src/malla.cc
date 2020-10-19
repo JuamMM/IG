@@ -14,7 +14,7 @@ void Malla3D::draw_ModoInmediato()
   // visualizar la malla usando glDrawElements,
   // completar (práctica 1)
   //
-  glPointSize(2);
+  glPointSize(10);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
 
@@ -44,10 +44,18 @@ void Malla3D::draw_ModoDiferido()
 		id_vbo_f = CrearVBO(GL_ELEMENT_ARRAY_BUFFER,f.size()*3*sizeof(int), f.data());
 	}
 
+	if(id_vbo_c == 0){
+		id_vbo_c = CrearVBO(GL_ARRAY_BUFFER,c_diferido.size()*3*sizeof(float),c_diferido.data());
+	}
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_v);
 	glVertexPointer(3,GL_FLOAT,0,0);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_c);
+	glColorPointer(3,GL_FLOAT,0,0);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_f);
@@ -109,6 +117,11 @@ void Malla3D::draw(char modo)
 
 }
 
+void Malla3D::cambiaColor(Tupla3f color){
+	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
+		(*it) = color;
+	}
+}
 
 GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram){
 	GLuint id_vbo;

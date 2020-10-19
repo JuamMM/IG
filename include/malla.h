@@ -29,6 +29,8 @@ class Malla3D
 		dibujar = !dibujar;
 	}
 
+	void cambiaColor(Tupla3f color);
+
    // dibuja el objeto en modo diferido (usando VBOs)
    void draw_ModoDiferido();
 
