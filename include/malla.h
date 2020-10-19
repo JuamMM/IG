@@ -23,19 +23,21 @@ class Malla3D
    public:
 
    // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato(int modo);
+   void draw_ModoInmediato();
 
 	void cambiaEstado(){
 		dibujar = !dibujar;
 	}
 
    // dibuja el objeto en modo diferido (usando VBOs)
-   void draw_ModoDiferido(int modo);
+   void draw_ModoDiferido();
+
+	void draw_ModoAjedrez();
 
    // función que redibuja el objeto
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
-   void draw(char modo, int estilo) ;
+   void draw(char modo) ;
 
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
@@ -45,7 +47,11 @@ class Malla3D
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
-	std::vector<Tupla3f> c ; // completar: tabla de colores, tabla de normales de vértices
+	std::vector<Tupla3f> c_inmediato; // completar: tabla de colores, tabla de normales de vértices
+	std::vector<Tupla3f> c_diferido;
+
+	Tupla3f inmediato = {0,0,1};
+	Tupla3f diferido = {1,0,0};
 
 	GLuint id_vbo_v = 0;
 	GLuint id_vbo_f = 0;

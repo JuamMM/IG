@@ -39,8 +39,9 @@ class Escena
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
 
 	char modoDibujo = 'I';
-	int modoVis = 2;
-
+	bool comoPuntos = false;
+	bool comoLineas = false;
+	bool comoTriangulos = true;
 
    public:
 

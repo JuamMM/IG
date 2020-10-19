@@ -66,9 +66,23 @@ void Escena::dibujar()
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer
-	 cubo->draw(modoDibujo, modoVis);
-    // o
-    tetraedro->draw(modoDibujo, modoVis);
+	 if(comoPuntos){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		cubo->draw(modoDibujo );
+		tetraedro->draw(modoDibujo);
+	 }
+
+	 if(comoLineas){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		cubo->draw(modoDibujo);
+		tetraedro->draw(modoDibujo);
+	 }
+
+	 if(comoTriangulos){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		cubo->draw(modoDibujo);
+		tetraedro->draw(modoDibujo);
+	 }
 
 }
 
@@ -146,7 +160,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'P' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo puntos"<<endl;
-				modoVis = 0;
+				comoPuntos = !comoPuntos;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
@@ -155,7 +169,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'L' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo lineas"<<endl;
-				modoVis = 1;
+				comoLineas = !comoLineas;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
@@ -164,7 +178,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'S' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo Caras"<<endl;
-				modoVis = 2;
+				comoTriangulos = !comoTriangulos;
+			}
+			else{
+				cout<<"Tecla no válida"<<endl;
+			}
+			break;
+		case 'A' :
+			if(modoMenu == SELVISUALIZACION){
+				cout<<"Dibujando en modo Ajedrez"<<endl;
+				modoDibujo = 'A';
+				comoTriangulos = true;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;

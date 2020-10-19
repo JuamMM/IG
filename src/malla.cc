@@ -9,38 +9,29 @@
 
 // Visualización en modo inmediato con 'glDrawElements'
 
-void Malla3D::draw_ModoInmediato(int modo)
+void Malla3D::draw_ModoInmediato()
 {
   // visualizar la malla usando glDrawElements,
   // completar (práctica 1)
   //
-  glPointSize(10);
+  glPointSize(2);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
 
   glVertexPointer(3,GL_FLOAT,0,v.data());
-  glColorPointer(3,GL_FLOAT,0,c.data());
-  if(modo == 0){
-	glDrawElements(GL_POINTS,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
-  else if(modo == 1){
-	glDrawElements(GL_LINES,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
-  else{
-	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
+  glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
 
+  glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
 
-
-  glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY);
 
 
 }
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 
-void Malla3D::draw_ModoDiferido(int modo)
+void Malla3D::draw_ModoDiferido()
 {
    // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
    // completar (práctica 1)
@@ -60,34 +51,61 @@ void Malla3D::draw_ModoDiferido(int modo)
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_f);
-  if(modo == 0){
-	glDrawElements(GL_POINTS,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
-  else if(modo == 1){
-	glDrawElements(GL_LINES,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
-  else{
-	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
-  }
+
+	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 
 }
+
+void Malla3D::draw_ModoAjedrez(){
+	std::vector<Tupla3i> f_par;
+	std::vector<Tupla3i> f_impar;
+
+	for(int i=0; i<f.size();i++){
+		if(i%2 == 0){
+			f_par.push_back(f[i]);
+		}
+		else{
+			f_impar.push_back(f[i]);
+		}
+	}
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+
+  glVertexPointer(3,GL_FLOAT,0,v.data());
+
+  glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
+  glDrawElements(GL_TRIANGLES,f_par.size()*3,GL_UNSIGNED_INT,f_par.data());
+
+  glColorPointer(3,GL_FLOAT,0,c_diferido.data());
+  glDrawElements(GL_TRIANGLES,f_impar.size()*3,GL_UNSIGNED_INT,f_impar.data());
+
+  glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+}
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(char modo, int estilo)
+void Malla3D::draw(char modo)
 {
    // completar .....(práctica 1)
 	if(dibujar && modo == 'D'){
-		draw_ModoDiferido(estilo);
+		draw_ModoDiferido();
 	}
 	else if(dibujar && modo == 'I'){
-		draw_ModoInmediato(estilo);
+		draw_ModoInmediato();
 	}
+	else if(dibujar && modo == 'A'){
+		draw_ModoAjedrez();
+	}
+
 
 }
 

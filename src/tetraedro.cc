@@ -8,7 +8,8 @@ Tetraedro::Tetraedro(const float lado)
    // inicializar la tabla de vértices
 	v.resize(4);
 	f.resize(4);
-	c.resize(4);
+	c_inmediato.resize(4);
+	c_diferido.resize(4);
 
 	float mediana = sqrt( pow(lado,2) - pow(lado/2,2));
 	float altura = sqrt( pow(lado,2) - pow(mediana/3,2));
@@ -26,9 +27,9 @@ Tetraedro::Tetraedro(const float lado)
 	f[3] = {0,1,2};
    // (es importante en cada cara ordenar los vértices en sentido contrario
    //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
-	c[0] = {1,0,0};
-	c[1] = {0,1,0};
-	c[2] = {1,0,0};
-	c[3] = {0,1,0};
+	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
+		(*it) = inmediato;
+	}
+
 
 }
