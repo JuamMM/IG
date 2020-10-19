@@ -69,6 +69,7 @@ void Escena::dibujar()
 	 if(comoPuntos){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 		cubo->cambiaColor({1,0,0});
+		tetraedro->cambiaColor({1,0,0});
 		cubo->draw(modoDibujo );
 		tetraedro->draw(modoDibujo);
 	 }
@@ -76,12 +77,14 @@ void Escena::dibujar()
 	 if(comoLineas){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		cubo->cambiaColor({0,1,0});
+		tetraedro->cambiaColor({0,1,0});
 		cubo->draw(modoDibujo);
 		tetraedro->draw(modoDibujo);
 	 }
 
 	 if(comoTriangulos){
 		cubo->cambiaColor({0,0,1});
+		tetraedro->cambiaColor({0,0,1});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		cubo->draw(modoDibujo);
 		tetraedro->draw(modoDibujo);
