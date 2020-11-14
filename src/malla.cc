@@ -69,7 +69,7 @@ void Malla3D::draw_ModoDiferido()
 
 }
 
-void Malla3D::draw_ModoAjedrez(){
+void Malla3D::draw_ModoAjedrez_Inmediato(){
 	std::vector<Tupla3i> f_par;
 	std::vector<Tupla3i> f_impar;
 
@@ -97,21 +97,89 @@ void Malla3D::draw_ModoAjedrez(){
   glDisableClientState(GL_VERTEX_ARRAY);
 
 }
+
+void Malla3D::draw_ModoAjedrez_Diferido()
+{
+	std::vector<Tupla3i> f_par;
+	std::vector<Tupla3i> f_impar;
+
+	for(int i=0; i<f.size();i++){
+		if(i%2 == 0){
+			f_par.push_back(f[i]);
+		}
+		else{
+			f_impar.push_back(f[i]);
+		}
+	}
+
+	if(id_vbo_v == 0){
+		id_vbo_v = CrearVBO(GL_ARRAY_BUFFER,v.size()*3*sizeof(float),v.data());
+	}
+
+	if(id_vbo_f == 0){
+		id_vbo_f = CrearVBO(GL_ELEMENT_ARRAY_BUFFER,f_impar.size()*3*sizeof(int), f_impar.data());
+	}
+
+	if(id_vbo_f_p == 0){
+		id_vbo_f_p = CrearVBO(GL_ELEMENT_ARRAY_BUFFER,f_par.size()*3*sizeof(int), f_par.data());
+	}
+
+	if(id_vbo_c == 0){
+		id_vbo_c = CrearVBO(GL_ARRAY_BUFFER,c_diferido.size()*3*sizeof(float),c_diferido.data());
+	}
+
+	if(id_vbo_ci == 0){
+		id_vbo_ci = CrearVBO(GL_ARRAY_BUFFER,c_inmediato.size()*3*sizeof(float),c_inmediato.data());
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_v);
+	glVertexPointer(3,GL_FLOAT,0,0);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_c);
+	glColorPointer(3,GL_FLOAT,0,0);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_f_p);
+
+	glDrawElements(GL_TRIANGLES,f_par.size()*3,GL_UNSIGNED_INT,0);
+
+	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ci);
+	glColorPointer(3,GL_FLOAT,0,0);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_f);
+
+	glDrawElements(GL_TRIANGLES,f_impar.size()*3,GL_UNSIGNED_INT,0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+}
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(char modo)
+void Malla3D::draw(char modo, bool dibujar_Ajedrez)
 {
    // completar .....(práctica 1)
-	if(dibujar && modo == 'D'){
+	if(dibujar && dibujar_Ajedrez){
+		if(modo == 'I'){
+			draw_ModoAjedrez_Inmediato();
+		}
+		else{
+			draw_ModoAjedrez_Diferido();
+		}
+	}
+	else if(dibujar && modo == 'D'){
 		draw_ModoDiferido();
 	}
 	else if(dibujar && modo == 'I'){
 		draw_ModoInmediato();
-	}
-	else if(dibujar && modo == 'A'){
-		draw_ModoAjedrez();
 	}
 
 

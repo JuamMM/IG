@@ -23,6 +23,21 @@ Escena::Escena()
     // .....
 	 tetraedro = new Tetraedro(100);
 	 cubo= new Cubo(50);
+	 modelo = new ObjPLY("./plys/beethoven.ply");
+	 peon = new ObjRevolucion("./plys/peon.ply",15,true,true);
+
+	 std::vector<Tupla3f> puntos;
+	 puntos.push_back({30,-30,0});
+	 puntos.push_back({0,30,0});
+	 cono = new Cono(puntos,true,10);
+
+	 puntos.clear();
+
+	 puntos.push_back({30,-50,0});
+	 puntos.push_back({30,50,0});
+	 cilindro = new Cilindro(puntos,true,true,10);
+
+	 esfera = new Esfera(20,30,true,true);
 
 }
 
@@ -68,33 +83,32 @@ void Escena::dibujar()
     // y hacer
 	 if(comoPuntos){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-		cubo->cambiaColor({1,0,0});
-		tetraedro->cambiaColor({1,0,0});
-		cubo->draw(modoDibujo );
-		tetraedro->draw(modoDibujo);
+		dibujaObjetos();
 	 }
 
 	 if(comoLineas){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		cubo->cambiaColor({0,1,0});
-		tetraedro->cambiaColor({0,1,0});
-		cubo->draw(modoDibujo);
-		tetraedro->draw(modoDibujo);
+		dibujaObjetos();
 	 }
 
 	 if(comoTriangulos){
-		cubo->cambiaColor({0,0,1});
-		tetraedro->cambiaColor({0,0,1});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		cubo->draw(modoDibujo);
-		tetraedro->draw(modoDibujo);
+		dibujaObjetos();
 	 }
 
 }
 
 void Escena::dibujaObjetos(){
-	cubo->draw(modoDibujo);
-	tetraedro->draw(modoDibujo);
+	cubo->cambiaColor({1,0,0});
+	peon->cambiaColor({1,0,0});
+	tetraedro->cambiaColor({1,0,0});
+
+	cubo->draw(modoDibujo,ajedrez);
+	tetraedro->draw(modoDibujo,ajedrez);
+	peon->draw(modoDibujo,ajedrez);
+	cono->draw(modoDibujo,ajedrez);
+	cilindro->draw(modoDibujo,ajedrez);
+	esfera->draw(modoDibujo,ajedrez);
 }
 
 //**************************************************************************
@@ -132,6 +146,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          modoMenu=SELDIBUJADO;
          break ;
          // COMPLETAR con los diferentes opciones de teclado
+		 case 'Y' :
+			if(modoMenu == SELOBJETO){
+//				peon->cambiaEstado();
+//				cono->cambiaEstado();
+//				cilindro->cambiaEstado();
+				esfera->cambiaEstado();
+				cout<<"Mostrando el modelo"<<endl;
+			}
+			else{
+				cout<<"Tecla no válida"<<endl;
+			}
+			break ;
 		 case 'C' :
 			if(modoMenu == SELOBJETO){
 				cubo->cambiaEstado();
@@ -198,15 +224,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'A' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo Ajedrez"<<endl;
-				modoDibujo = 'A';
-				comoTriangulos = true;
+				ajedrez = !ajedrez;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
 			}
 			break;
 		 case 'H':
-			cout<<"Usa la tecla O para seleccionar el objeto luego (C)ubo y (T)etraedro para las dos figuras"<<endl;
+			cout<<"Usa la tecla O para seleccionar el objeto luego (C)ubo y (T)etraedro para las dos figuras e Y para el modelo"<<endl;
 			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras"<<endl;
 			cout<<"La tecla D para el dibujado 1 para modo inmediato y 2 para modo deferido"<<endl;
 			break;
@@ -237,6 +262,12 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
          Observer_distance *=1.2 ;
          break;
 	   case GLUT_KEY_PAGE_DOWN:
+         Observer_distance /= 1.2 ;
+         break;
+	   case GLUT_KEY_F2:
+         Observer_distance *=1.2 ;
+         break;
+	   case GLUT_KEY_F3:
          Observer_distance /= 1.2 ;
          break;
 	}

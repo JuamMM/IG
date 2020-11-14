@@ -34,12 +34,13 @@ class Malla3D
    // dibuja el objeto en modo diferido (usando VBOs)
    void draw_ModoDiferido();
 
-	void draw_ModoAjedrez();
+	void draw_ModoAjedrez_Inmediato();
+	void draw_ModoAjedrez_Diferido();
 
    // función que redibuja el objeto
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
-   void draw(char modo) ;
+   void draw(char modo, bool dibujar_Ajedrez) ;
 
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
@@ -57,7 +58,9 @@ class Malla3D
 
 	GLuint id_vbo_v = 0;
 	GLuint id_vbo_f = 0;
+	GLuint id_vbo_f_p = 0;
 	GLuint id_vbo_c = 0;
+	GLuint id_vbo_ci = 0;
 
 	bool dibujar = false;
 
