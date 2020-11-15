@@ -13,15 +13,15 @@ Cubo::Cubo(float lado)
 
 
    // inicializar la tabla de caras o triángulos:
-	v[0] = {0.0f,0.0f,0.0f};
-	v[1] = {lado,0.0f,0.0f};
-	v[2] = {lado,0.0f,lado};
-	v[3] = {0.0f,0.0f,lado};
+	v[0] = {-lado/2,-lado/2,-lado/2};
+	v[1] = {lado/2,-lado/2,-lado/2};
+	v[2] = {lado/2,-lado/2,lado/2};
+	v[3] = {-lado/2,-lado/2,lado/2};
 
-	v[4] = {0.0f,lado,0.0f};
-	v[5] = {lado,lado,0.0f};
-	v[6] = {lado,lado,lado};
-	v[7] = {0.0f,lado,lado};
+	v[4] = {-lado/2,lado/2,-lado/2};
+	v[5] = {lado/2,lado/2,-lado/2};
+	v[6] = {lado/2,lado/2,lado/2};
+	v[7] = {-lado/2,lado/2,lado/2};
 
 	f[0] = {3,0,2};
 	f[1] = {2,0,1};

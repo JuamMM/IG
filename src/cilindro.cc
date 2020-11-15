@@ -13,7 +13,7 @@ Cilindro::Cilindro(std::vector<Tupla3f> archivo, bool tapa_inf, bool tapa_sup, i
 	this->tapa_inf = tapa_inf;
 	this->tapa_sup = tapa_sup;
 
-	crearMalla(num_instancias);
+	crearMalla(num_instancias,'y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());

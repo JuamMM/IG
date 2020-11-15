@@ -28,7 +28,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 
 	this->tapa_inf = tapa_inf;
 	this->tapa_sup = tapa_sup;
-	crearMalla(num_instancias);
+	crearMalla(num_instancias,'y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());
@@ -54,7 +54,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
 	this->tapa_inf = tapa_inf;
 	this->tapa_sup = tapa_sup;
-	crearMalla(num_instancias);
+	crearMalla(num_instancias,'y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());
@@ -64,17 +64,32 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 	}
 }
 
-void ObjRevolucion::crearMalla(int num_instancias) {
-	float x,z;
+void ObjRevolucion::crearMalla(int num_instancias, char sentido) {
+	float x,z,y;
 	Tupla3f nuevo_v;
 	for(int i =0; i<num_instancias; i++){
 		for(auto it = perfil.begin(); it != perfil.end(); it++){
 			float angulo = (2*M_PI*i)/(num_instancias);
 
-			x = (*it)(0) * cos(angulo) + (*it)(2) * sin(angulo);
-			z = (*it)(0) * -sin(angulo) + (*it)(2) * cos(angulo);
+			switch(sentido){
+				case 'x':
+					x = (*it)(0);
+					y = (*it)(1) * cos(angulo) - (*it)(2) * sin(angulo);
+					z = (*it)(1) * sin(angulo) + (*it)(2) *  cos(angulo);
+					break;
+				case 'y':
+					x = (*it)(0) * cos(angulo) + (*it)(2) * sin(angulo);
+					y = (*it)(1);
+					z = (*it)(0) * -sin(angulo) + (*it)(2) * cos(angulo);
+					break;
+				case 'z':
+					x = (*it)(0) * cos(angulo) - (*it)(1) * sin(angulo);
+					y = (*it)(0) * sin(angulo) + (*it)(1) * cos(angulo);
+					z = (*it)(2);
+					break;
+			}
 
-			nuevo_v = {x,(*it)(1),z};
+			nuevo_v = {x,y,z};
 			v.push_back(nuevo_v);
 		}
 	}

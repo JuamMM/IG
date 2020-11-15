@@ -147,9 +147,9 @@ void leer_vertices
       src.getline( buffer, tam_buffer ); // ignore more properties, so far ...
 
       // add new vertex
-		x *= 50;
-		y *= 50;
-		z *= 50;
+		x *= 20;
+		y *= 20;
+		z *= 20;
       vertices[iv] = Tupla3f(x,y,z) ;
    }
    //cout << "  fin de la lista de vértices" << endl << flush ;

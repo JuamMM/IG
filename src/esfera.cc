@@ -13,7 +13,7 @@ Esfera::Esfera(int num_instancias, int radio, bool tapa_sup, bool tapa_inf){
 	this->tapa_inf = tapa_inf;
 	this->tapa_sup = tapa_sup;
 
-	crearMalla(num_instancias);
+	crearMalla(num_instancias,'y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());
