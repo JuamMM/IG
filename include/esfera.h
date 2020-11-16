@@ -6,7 +6,7 @@
 
 class Esfera: public ObjRevolucion{
 	public:
-		Esfera(int num_instancias, int radio, bool tapa_sup, bool tapa_inf);
+		Esfera(int num_instancias, int radio, bool tapas);
 		void crearPerfil(int radio);
 
 };

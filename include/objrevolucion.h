@@ -29,14 +29,18 @@ class ObjRevolucion : public Malla3D
 {
 	protected:
 	Tupla3f polo_norte, polo_sur;
-	bool tapa_sup = false;
-	bool tapa_inf = false;
+	bool tapas;
 	std::vector<Tupla3f> perfil;
+	std::vector<Tupla3i> f_sup;
+	std::vector<Tupla3i> f_inf;
+	int intervalo_tapa, indice_sup, num_instancias;
    public:
        ObjRevolucion();
-   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
-   ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
-    void crearMalla(int num_instancias, char sentido);
+   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapas) ;
+   ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapas) ;
+    void crearMalla(char sentido);
+	 void ocultaTapas();
+	 void draw_ModoInmediato();
 
 } ;
 

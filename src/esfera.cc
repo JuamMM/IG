@@ -2,7 +2,7 @@
 #include "malla.h"
 #include "esfera.h"
 
-Esfera::Esfera(int num_instancias, int radio, bool tapa_sup, bool tapa_inf){
+Esfera::Esfera(int num_instancias, int radio, bool tapas){
 
 	crearPerfil(radio);
 	v = perfil;
@@ -10,10 +10,10 @@ Esfera::Esfera(int num_instancias, int radio, bool tapa_sup, bool tapa_inf){
 	int tam = perfil.size()-1;
 	polo_norte = {0,perfil[tam](1),0};
 
-	this->tapa_inf = tapa_inf;
-	this->tapa_sup = tapa_sup;
+	this->tapas = tapas;
+	this->num_instancias = num_instancias;
 
-	crearMalla(num_instancias,'y');
+	crearMalla('y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());

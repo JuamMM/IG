@@ -23,7 +23,6 @@ class Malla3D
    public:
 
    // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato();
 
 	void cambiaEstado(){
 		dibujar = !dibujar;
@@ -32,7 +31,6 @@ class Malla3D
 	void cambiaColor(Tupla3f color);
 
    // dibuja el objeto en modo diferido (usando VBOs)
-   void draw_ModoDiferido();
 
 	void draw_ModoAjedrez_Inmediato();
 	void draw_ModoAjedrez_Diferido();
@@ -44,7 +42,11 @@ class Malla3D
 
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
+
+
    protected:
+	virtual void draw_ModoDiferido();
+	virtual void draw_ModoInmediato();
 
    void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
 

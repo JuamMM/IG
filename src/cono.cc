@@ -9,9 +9,10 @@ Cono::Cono(std::vector<Tupla3f> archivo, bool tapa_inf, int num_instancias){
 	polo_sur = {0,perfil[0](1),0};
 	int tam = perfil.size()-1;
 	polo_norte = {0,perfil[tam](1),0};
+	this->num_instancias = num_instancias;
 
-	this->tapa_inf = tapa_inf;
-	crearMalla(num_instancias,'y');
+	this->tapas = tapa_inf;
+	crearMalla('y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());

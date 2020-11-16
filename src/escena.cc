@@ -24,7 +24,7 @@ Escena::Escena()
 	 tetraedro = new Tetraedro(30);
 	 cubo= new Cubo(30);
 	 modelo = new ObjPLY("./plys/beethoven.ply");
-	 peon = new ObjRevolucion("./plys/peon.ply",15,true,true);
+	 peon = new ObjRevolucion("./plys/peon.ply",15,true);
 
 	 std::vector<Tupla3f> puntos;
 	 puntos.push_back({10,-10,0});
@@ -35,9 +35,9 @@ Escena::Escena()
 
 	 puntos.push_back({10,-20,0});
 	 puntos.push_back({10,20,0});
-	 cilindro = new Cilindro(puntos,true,true,10);
+	 cilindro = new Cilindro(puntos,true,10);
 
-	 esfera = new Esfera(20,10,true,true);
+	 esfera = new Esfera(20,10,true);
 
 }
 
@@ -52,7 +52,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
-	glEnable(GL_CULL_FACE);
+//	glEnable(GL_CULL_FACE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -225,6 +225,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else{
 				cout<<"Tecla no válida"<<endl;
 			}
+			break;
+		case 'I' :
+			cout<<"Cambiando tapas inferiores"<<endl;
+			cilindro->ocultaTapas();
 			break;
 		 case 'H':
 			cout<<"Usa la tecla O para pintar los objetos"<<endl;

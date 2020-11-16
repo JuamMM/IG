@@ -16,7 +16,7 @@
 
 ObjRevolucion::ObjRevolucion() {}
 
-ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapas) {
 	ply::read_vertices(archivo, this->perfil);
 
 
@@ -24,11 +24,11 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 	polo_sur = {0,perfil[0](1),0};
 	int tam = perfil.size()-1;
 	polo_norte = {0,perfil[tam](1),0};
+	this->num_instancias = num_instancias;
 
 
-	this->tapa_inf = tapa_inf;
-	this->tapa_sup = tapa_sup;
-	crearMalla(num_instancias,'y');
+	this->tapas = tapas;
+	crearMalla('y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());
@@ -44,17 +44,17 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
 
-ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
+ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapas) {
 
 	this->perfil = archivo;
 	this->v = this->perfil;
 	polo_sur = {0,perfil[0](1),0};
 	int tam = perfil.size()-1;
 	polo_norte = {0,perfil[tam](1),0};
+	this->num_instancias = num_instancias;
 
-	this->tapa_inf = tapa_inf;
-	this->tapa_sup = tapa_sup;
-	crearMalla(num_instancias,'y');
+	this->tapas = tapas;
+	crearMalla('y');
 
 	c_inmediato.resize(v.size());
 	c_diferido.resize(v.size());
@@ -64,7 +64,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 	}
 }
 
-void ObjRevolucion::crearMalla(int num_instancias, char sentido) {
+void ObjRevolucion::crearMalla(char sentido) {
 	float x,z,y;
 	Tupla3f nuevo_v;
 	for(int i =0; i<num_instancias; i++){
@@ -111,10 +111,12 @@ void ObjRevolucion::crearMalla(int num_instancias, char sentido) {
 		}
 	}
 
+
 	int v1,v2,v3;
-	if(tapa_sup){
+	if(tapas){
 		v.push_back(polo_norte);
 		v1 = v.size()-1;
+		indice_sup = f.size();
 
 		for(int i=0; i<num_instancias;i++){
 			int y = perfil.size()*i + perfil.size()-1;
@@ -126,9 +128,7 @@ void ObjRevolucion::crearMalla(int num_instancias, char sentido) {
 		v2 = perfil.size()-1;
 		v3 = (perfil.size()*(num_instancias+1))-1;
 		f.push_back({v2,v1,v3});
-	}
 
-	if(tapa_inf){
 		v.push_back(polo_sur);
 		v1 = v.size()-1;
 
@@ -144,4 +144,36 @@ void ObjRevolucion::crearMalla(int num_instancias, char sentido) {
 		f.push_back({v2,v1,v3});
 
 	}
+	intervalo_tapa = f.size() - (indice_sup+1);
+
+}
+
+void ObjRevolucion::ocultaTapas(){
+	tapas = !tapas;
+
+}
+
+void ObjRevolucion::draw_ModoInmediato()
+{
+  // visualizar la malla usando glDrawElements,
+  // completar (práctica 1)
+  //
+  glPointSize(10);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+
+  glVertexPointer(3,GL_FLOAT,0,v.data());
+  glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
+
+  if(tapas){
+	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
+  }
+  else{
+	glDrawElements(GL_TRIANGLES,(f.size()*3)-(intervalo_tapa*3),GL_UNSIGNED_INT,f.data());
+  }
+
+  glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+
 }
