@@ -33,6 +33,8 @@ class Escena
 	void change_projection( const float ratio_xy );
 	void change_observer();
 
+	void Colores(Tupla3f nuevo_color);
+
 
 
    void clear_window();

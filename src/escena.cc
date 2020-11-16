@@ -52,7 +52,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
-//	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -82,26 +82,36 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer
 	 if(comoPuntos){
+		Colores({1,0,0});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 		dibujaObjetos();
 	 }
 
 	 if(comoLineas){
+		Colores({0,0,1});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		dibujaObjetos();
 	 }
 
 	 if(comoTriangulos){
+		Colores({0,1,0});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		dibujaObjetos();
 	 }
 
 }
 
+void Escena::Colores(Tupla3f nuevo_color){
+	cubo->cambiaColor(nuevo_color);
+	peon->cambiaColor(nuevo_color);
+	tetraedro->cambiaColor(nuevo_color);
+	esfera->cambiaColor(nuevo_color);
+	cilindro->cambiaColor(nuevo_color);
+	cono->cambiaColor(nuevo_color);
+
+}
+
 void Escena::dibujaObjetos(){
-	cubo->cambiaColor({1,0,0});
-	peon->cambiaColor({1,0,0});
-	tetraedro->cambiaColor({1,0,0});
 
 	glPushMatrix();
 	glTranslatef(30,0,0);
@@ -115,6 +125,7 @@ void Escena::dibujaObjetos(){
 
 	glPushMatrix();
 	glTranslatef(-30,0,0);
+	glScalef(15,15,15);
 	peon->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
@@ -228,10 +239,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			break;
 		case 'I' :
 			cout<<"Cambiando tapas inferiores"<<endl;
+			esfera->ocultaTapas();
+			cono->ocultaTapas();
+			peon->ocultaTapas();
 			cilindro->ocultaTapas();
 			break;
 		 case 'H':
 			cout<<"Usa la tecla O para pintar los objetos"<<endl;
+			cout<<"Pulsa la tecla I para eliminar/pintar las capas"<<endl;
 			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras"<<endl;
 			cout<<"La tecla D para el dibujado 1 para modo inmediato y 2 para modo deferido"<<endl;
 			break;

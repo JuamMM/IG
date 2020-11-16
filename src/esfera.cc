@@ -24,13 +24,13 @@ Esfera::Esfera(int num_instancias, int radio, bool tapas){
 }
 
 void Esfera::crearPerfil(int radio){
-	float x = 6, y = radio*-1 ,z = 0;
 	float x_antigua, y_antigua;
+	float angulo = M_PI/40;
 	Tupla3f vertice;
+	float x = radio*sin(0), y = -radio*cos(0) ,z = 0;
 	x_antigua = x;
 	y_antigua = y;
-	float angulo = 2.81/50;
-	for(int i=0;i<50;i++){
+	for(int i=1;i<40;i++){
 
 		x = x_antigua * cos(angulo*i) - y_antigua * sin(angulo*i);
 		y = x_antigua * sin(angulo*i) + y_antigua * cos(angulo*i);
