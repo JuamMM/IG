@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "material.h"
 
 // *****************************************************************************
 //
@@ -32,6 +33,7 @@ class Malla3D
 
    // dibuja el objeto en modo diferido (usando VBOs)
 
+	void cambiaMaterial(Material material);
 	void draw_ModoAjedrez_Inmediato();
 	void draw_ModoAjedrez_Diferido();
 
@@ -39,6 +41,7 @@ class Malla3D
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    void draw(char modo, bool dibujar_Ajedrez) ;
+	void calculaNormales();
 
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
@@ -48,15 +51,19 @@ class Malla3D
 	virtual void draw_ModoDiferido();
 	virtual void draw_ModoInmediato();
 
+
    void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
 	std::vector<Tupla3f> c_inmediato; // completar: tabla de colores, tabla de normales de vértices
 	std::vector<Tupla3f> c_diferido;
+	std::vector<Tupla3f> nv;
+
+	Material m;
 
 	Tupla3f inmediato = {0,0,1};
-	Tupla3f diferido = {1,0,0};
+	Tupla3f diferido = {0,1,0};
 
 	GLuint id_vbo_v = 0;
 	GLuint id_vbo_f = 0;

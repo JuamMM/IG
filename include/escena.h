@@ -10,6 +10,8 @@
 #include "cono.h"
 #include "cilindro.h"
 #include "esfera.h"
+#include "luzposicional.h"
+#include "luzdireccional.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 class Escena
@@ -34,6 +36,7 @@ class Escena
 	void change_observer();
 
 	void Colores(Tupla3f nuevo_color);
+	void enciendeLuces();
 
 
 
@@ -46,15 +49,22 @@ class Escena
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
 	ObjPLY * modelo = nullptr;
 	ObjRevolucion * peon = nullptr;
+	ObjRevolucion * peon2 = nullptr;
 	Cono * cono = nullptr;
 	Cilindro * cilindro = nullptr;
 	Esfera * esfera = nullptr;
+	LuzPosicional * luz0 = nullptr;
+	LuzDireccional * luz1 = nullptr;
 
 	char modoDibujo = 'I';
 	bool comoPuntos = false;
 	bool comoLineas = false;
 	bool comoTriangulos = true;
 	bool ajedrez = false;
+	bool luces=false;
+
+	bool alpha_pulsada = false;
+	bool beta_pulsada = false;
 
    public:
 

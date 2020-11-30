@@ -32,4 +32,5 @@ Tetraedro::Tetraedro(const float lado)
 	}
 
 
+	calculaNormales();
 }

@@ -21,6 +21,7 @@ Esfera::Esfera(int num_instancias, int radio, bool tapas){
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) =inmediato;
 	}
+	calculaNormales();
 }
 
 void Esfera::crearPerfil(int radio){

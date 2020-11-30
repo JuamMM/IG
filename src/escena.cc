@@ -7,6 +7,13 @@
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
+//
+
+Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
+Material ruby ({ 0.1745f, 0.01175f, 0.01175f, 0.55f },{0.61424f, 0.04136f, 0.04136f, 0.55f },{0.727811f, 0.626959f, 0.626959f, 0.55f }, 76.8f);
+Material perla({ 0.25f, 0.20725f, 0.20725f, 0.922f }, {1.0f, 0.829f, 0.829f, 0.922f }, {0.296648f, 0.296648f, 0.296648f, 0.922f }, 11.264f);
+Material obsidiana({ 0.05375f, 0.05f, 0.06625f, 0.82f }, { 0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f }, 38.4f
+);
 
 Escena::Escena()
 {
@@ -25,6 +32,7 @@ Escena::Escena()
 	 cubo= new Cubo(30);
 	 modelo = new ObjPLY("./plys/beethoven.ply");
 	 peon = new ObjRevolucion("./plys/peon.ply",15,true);
+	 peon2 = new ObjRevolucion("./plys/peon.ply",15,true);
 
 	 std::vector<Tupla3f> puntos;
 	 puntos.push_back({10,-10,0});
@@ -37,7 +45,15 @@ Escena::Escena()
 	 puntos.push_back({10,20,0});
 	 cilindro = new Cilindro(puntos,true,10);
 
+
 	 esfera = new Esfera(20,10,true);
+
+	 Tupla3f pos_0 = {0,50,0};
+	 Tupla3f pos_1 = {50,0,0};
+
+
+	 luz0 = new LuzPosicional(pos_0,GL_LIGHT0,{0,0,0,1},{1,1,1,1},{1,1,1,1});
+	 luz1 = new LuzDireccional(pos_1, GL_LIGHT1,{0,0,0,1},{1,1,1,1},{1,1,1,1});
 
 }
 
@@ -53,12 +69,24 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_NORMALIZE);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+
+	peon->cambiaEstado();
+	peon2->cambiaEstado();
+	tetraedro->cambiaEstado();
+	cono->cambiaEstado();
+	cilindro->cambiaEstado();
+	cubo->cambiaEstado();
+	esfera->cambiaEstado();
+	esfera->cambiaMaterial(ruby);
+	peon2->cambiaMaterial(obsidiana);
+	peon->cambiaMaterial(perla);
 
 	std::cout<<"Pulsa H para recibir a ayuda"<<std::endl;
 }
@@ -76,6 +104,7 @@ void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
+	 glDisable(GL_LIGHTING);
     ejes.draw();
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
@@ -99,6 +128,18 @@ void Escena::dibujar()
 		dibujaObjetos();
 	 }
 
+	 if(luces){
+		glEnable(GL_LIGHTING);
+		enciendeLuces();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		dibujaObjetos();
+	 }
+
+}
+
+void Escena::enciendeLuces(){
+	luz0->activar();
+	luz1->activar();
 }
 
 void Escena::Colores(Tupla3f nuevo_color){
@@ -114,7 +155,7 @@ void Escena::Colores(Tupla3f nuevo_color){
 void Escena::dibujaObjetos(){
 
 	glPushMatrix();
-	glTranslatef(30,0,0);
+	glTranslatef(0,50,0);
 	cubo->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
@@ -127,6 +168,12 @@ void Escena::dibujaObjetos(){
 	glTranslatef(-30,0,0);
 	glScalef(15,15,15);
 	peon->draw(modoDibujo,ajedrez);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(30,0,0);
+	glScalef(15,15,15);
+	peon2->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -164,21 +211,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             salir=true ;
          }
          break ;
-      case 'O' :
-         // ESTAMOS EN MODO SELECCION DE OBJETO
-				peon->cambiaEstado();
-				tetraedro->cambiaEstado();
-				cono->cambiaEstado();
-				cilindro->cambiaEstado();
-				cubo->cambiaEstado();
-				esfera->cambiaEstado();
-				cout<<"Mostrando los objetos"<<endl;
-         break ;
         case 'V' :
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
-       case 'D' :
+/*       case 'D' :
          // ESTAMOS EN MODO SELECCION DE DIBUJADO
          modoMenu=SELDIBUJADO;
          break ;
@@ -200,11 +237,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else {
 				cout<<"Tecla no válida"<<endl;
 			}
-			break ;
+			break ;*/
 		case 'P' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo puntos"<<endl;
-				comoPuntos = !comoPuntos;
+				comoPuntos = true;
+				luces = false;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
@@ -213,7 +251,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'L' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo lineas"<<endl;
-				comoLineas = !comoLineas;
+				comoLineas = true;
+				luces = false;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
@@ -222,32 +261,94 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'S' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo Caras"<<endl;
-				comoTriangulos = !comoTriangulos;
-			}
-			else{
-				cout<<"Tecla no válida"<<endl;
-			}
-			break;
-		case 'A' :
-			if(modoMenu == SELVISUALIZACION){
-				cout<<"Dibujando en modo Ajedrez"<<endl;
-				ajedrez = !ajedrez;
+				comoTriangulos = true;
+				luces = false;
 			}
 			else{
 				cout<<"Tecla no válida"<<endl;
 			}
 			break;
 		case 'I' :
+			if(modoMenu == SELVISUALIZACION){
+				cout<<"Dibujando en modo iluminacion suave"<<endl;
+				comoTriangulos = false;
+				comoLineas = false;
+				comoPuntos = false;
+				ajedrez = false;
+				luces = true;
+			}
+			else{
+				cout<<"Tecla no válida"<<endl;
+			}
+			break;
+		case 'B':
+			if(luces){
+				cout<<"cambiando angulo beta"<<endl;
+				beta_pulsada = true;
+				alpha_pulsada = false;
+			}
+			break;
+		case 'A' :
+			if(modoMenu == SELVISUALIZACION && !luces){
+				cout<<"Dibujando en modo Ajedrez"<<endl;
+				ajedrez = !ajedrez;
+			}
+			else if (luces){
+				cout<<"cambiando angulo alpha"<<endl;
+				alpha_pulsada = true;
+				beta_pulsada = false;
+			}
+			else{
+				cout<<"Tecla no válida"<<endl;
+			}
+			break;
+		case 'T' :
 			cout<<"Cambiando tapas inferiores"<<endl;
 			esfera->ocultaTapas();
 			cono->ocultaTapas();
 			peon->ocultaTapas();
 			cilindro->ocultaTapas();
 			break;
+		case '0' :
+			if(luces){
+				cout<<"Encendiendo luz 0"<<endl;
+				luz0->encenderLuz();
+			}
+			else{
+				cout<<"La iluminacion no está activada"<<endl;
+			}
+			break;
+		case '1' :
+			if(luces){
+				cout<<"Encendiendo luz 1"<<endl;
+				luz1->encenderLuz();
+			}
+			else{
+				cout<<"La iluminacion no está activada"<<endl;
+			}
+			break;
+		case	'<':
+			if(alpha_pulsada){
+				luz1->variarAnguloAlpha(5.0f);
+			}
+
+			if(beta_pulsada){
+				luz1->variarAnguloBeta(5.0f);
+			}
+			break;
+		case	'>':
+			if(alpha_pulsada){
+				luz1->variarAnguloAlpha(-5.0f);
+			}
+
+			if(beta_pulsada){
+				luz1->variarAnguloBeta(-5.0f);
+			}
+			break;
 		 case 'H':
 			cout<<"Usa la tecla O para pintar los objetos"<<endl;
-			cout<<"Pulsa la tecla I para eliminar/pintar las capas"<<endl;
-			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras"<<endl;
+			cout<<"Pulsa la tecla T para eliminar/pintar las capas"<<endl;
+			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras, I para encender las luces"<<endl;
 			cout<<"La tecla D para el dibujado 1 para modo inmediato y 2 para modo deferido"<<endl;
 			break;
 

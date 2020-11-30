@@ -20,4 +20,5 @@ Cono::Cono(std::vector<Tupla3f> archivo, bool tapa_inf, int num_instancias){
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) =inmediato;
 	}
+	calculaNormales();
 }

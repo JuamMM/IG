@@ -38,6 +38,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 	}
 
 
+
 }
 
 // *****************************************************************************
@@ -62,6 +63,8 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) =inmediato;
 	}
+
+	calculaNormales();
 }
 
 void ObjRevolucion::crearMalla(char sentido) {
@@ -146,6 +149,7 @@ void ObjRevolucion::crearMalla(char sentido) {
 	}
 	intervalo_tapa = f.size() - (indice_sup+1);
 
+	calculaNormales();
 }
 
 void ObjRevolucion::ocultaTapas(){
@@ -165,6 +169,13 @@ void ObjRevolucion::draw_ModoInmediato()
   glVertexPointer(3,GL_FLOAT,0,v.data());
   glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
 
+  if(glIsEnabled(GL_LIGHTING)){
+	  glEnableClientState(GL_NORMAL_ARRAY);
+	  glNormalPointer(GL_FLOAT,0,nv.data());
+
+	  m.aplicar();
+  }
+
   if(tapas){
 	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
   }
@@ -174,6 +185,10 @@ void ObjRevolucion::draw_ModoInmediato()
 
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
+  if (glIsEnabled(GL_LIGHTING)){
+		  glDisableClientState(GL_NORMAL_ARRAY);
+
+	}
 
 
 }

@@ -19,6 +19,14 @@ void Malla3D::draw_ModoInmediato()
   glEnableClientState(GL_COLOR_ARRAY);
 
   glVertexPointer(3,GL_FLOAT,0,v.data());
+
+  if(glIsEnabled(GL_LIGHTING)){
+	  glEnableClientState(GL_NORMAL_ARRAY);
+	  glNormalPointer(GL_FLOAT,0,nv.data());
+
+	  m.aplicar();
+  }
+
   glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
 
   glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
@@ -26,6 +34,10 @@ void Malla3D::draw_ModoInmediato()
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 
+  if (glIsEnabled(GL_LIGHTING)){
+		  glDisableClientState(GL_NORMAL_ARRAY);
+
+	}
 
 }
 // -----------------------------------------------------------------------------
@@ -166,6 +178,7 @@ void Malla3D::draw_ModoAjedrez_Diferido()
 
 void Malla3D::draw(char modo, bool dibujar_Ajedrez)
 {
+	glShadeModel(GL_SMOOTH);
    // completar .....(práctica 1)
 	if(dibujar && dibujar_Ajedrez){
 		if(modo == 'I'){
@@ -191,6 +204,40 @@ void Malla3D::cambiaColor(Tupla3f color){
 	}
 }
 
+void Malla3D::calculaNormales(){
+	Tupla3f normal, m;
+
+	nv.resize(v.size());
+
+	for(int i=0; i< nv.size(); i++){
+		nv[i] = {0,0,0};
+	}
+
+	for(auto it = f.begin(); it != f.end();++it){
+
+		Tupla3f a = v[(*it)(1)]-v[(*it)(0)];
+		Tupla3f b = v[(*it)(2)]-v[(*it)(0)];
+
+		m = a.cross(b);
+
+		if(m.lengthSq() !=0){
+		normal = m;
+
+		nv[(*it)(0)] = nv[(*it)(0)] + normal;
+		nv[(*it)(1)] = nv[(*it)(1)] + normal;
+		nv[(*it)(2)] = nv[(*it)(2)] + normal;
+		}
+
+	}
+
+	for(int i=0; i<nv.size(); i++){
+		if(nv[i].lengthSq() != 0){
+			nv[i] = nv[i].normalized();
+		}
+	}
+
+}
+
 GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram){
 	GLuint id_vbo;
 	glGenBuffers(1, & id_vbo);
@@ -198,4 +245,9 @@ GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero
 	glBufferData(tipo_vbo,tamanio_bytes,puntero_ram, GL_STATIC_DRAW);
 	glBindBuffer(tipo_vbo,0);
 	return id_vbo;
+}
+
+void Malla3D::cambiaMaterial(Material material){
+	std::cout<<"material cambiado"<<std::endl;
+	m = material;
 }
