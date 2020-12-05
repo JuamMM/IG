@@ -12,6 +12,7 @@
 #include "esfera.h"
 #include "luzposicional.h"
 #include "luzdireccional.h"
+#include "sauron.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 class Escena
@@ -55,6 +56,8 @@ class Escena
 	Esfera * esfera = nullptr;
 	LuzPosicional * luz0 = nullptr;
 	LuzDireccional * luz1 = nullptr;
+
+	Sauron * sauron = nullptr;
 
 	char modoDibujo = 'I';
 	bool comoPuntos = false;

@@ -39,21 +39,19 @@ Escena::Escena()
 	 puntos.push_back({0,10,0});
 	 cono = new Cono(puntos,true,10);
 
-	 puntos.clear();
-
-	 puntos.push_back({10,-20,0});
-	 puntos.push_back({10,20,0});
-	 cilindro = new Cilindro(puntos,true,10);
+	 cilindro = new Cilindro(10,10,true,10);
 
 
 	 esfera = new Esfera(20,10,true);
 
-	 Tupla3f pos_0 = {0,50,0};
+	 Tupla3f pos_0 = {0,200,0};
 	 Tupla3f pos_1 = {50,0,0};
 
 
 	 luz0 = new LuzPosicional(pos_0,GL_LIGHT0,{0,0,0,1},{1,1,1,1},{1,1,1,1});
 	 luz1 = new LuzDireccional(pos_1, GL_LIGHT1,{0,0,0,1},{1,1,1,1},{1,1,1,1});
+
+	 sauron = new Sauron();
 
 }
 
@@ -155,7 +153,7 @@ void Escena::Colores(Tupla3f nuevo_color){
 void Escena::dibujaObjetos(){
 
 	glPushMatrix();
-	glTranslatef(0,50,0);
+	glTranslatef(0,-50,0);
 	cubo->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
@@ -186,7 +184,12 @@ void Escena::dibujaObjetos(){
 	cilindro->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(40,0,-30);
 	esfera->draw(modoDibujo,ajedrez);
+	glPopMatrix();
+
+	sauron->draw();
 }
 
 //**************************************************************************

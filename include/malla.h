@@ -21,6 +21,7 @@
 
 class Malla3D
 {
+	friend class sauron;
    public:
 
    // dibuja el objeto en modo inmediato

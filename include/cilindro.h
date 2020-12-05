@@ -6,7 +6,7 @@
 
 class Cilindro: public ObjRevolucion{
 	public:
-		Cilindro(std::vector<Tupla3f>, bool tapas, int num_instancias);
+		Cilindro(float altura, float radio, bool tapas, int num_instancias);
 
 };
 

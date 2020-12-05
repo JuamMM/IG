@@ -2,7 +2,12 @@
 #include "malla.h"
 #include "cilindro.h"
 
-Cilindro::Cilindro(std::vector<Tupla3f> archivo, bool tapas, int num_instancias){
+Cilindro::Cilindro(float altura, float radio, bool tapas, int num_instancias){
+
+	std::vector<Tupla3f> archivo;
+
+	archivo.push_back({radio,0,0});
+	archivo.push_back({radio,altura,0});
 
 	perfil = archivo;
 	v = perfil;
