@@ -60,11 +60,24 @@ void Malla3D::draw_ModoDiferido()
 		id_vbo_c = CrearVBO(GL_ARRAY_BUFFER,c_diferido.size()*3*sizeof(float),c_diferido.data());
 	}
 
+	if(id_vbo_nv == 0){
+		id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER,nv.size()*3*sizeof(float),nv.data());
+	}
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_v);
 	glVertexPointer(3,GL_FLOAT,0,0);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+  if(glIsEnabled(GL_LIGHTING)){
+	  glEnableClientState(GL_NORMAL_ARRAY);
+	  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nv);
+	  glNormalPointer(GL_FLOAT, 0, 0);
+	  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	  m.aplicar();
+  }
 
 	glBindBuffer(GL_ARRAY_BUFFER,id_vbo_c);
 	glColorPointer(3,GL_FLOAT,0,0);
@@ -78,6 +91,9 @@ void Malla3D::draw_ModoDiferido()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+  if (glIsEnabled(GL_LIGHTING)){
+		  glDisableClientState(GL_NORMAL_ARRAY);
+	}
 
 }
 
@@ -248,6 +264,5 @@ GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero
 }
 
 void Malla3D::cambiaMaterial(Material material){
-	std::cout<<"material cambiado"<<std::endl;
 	m = material;
 }

@@ -44,6 +44,13 @@ void change_window_size( int newWidth, int newHeight )
 	glutPostRedisplay();
 }
 
+void funcion_idle(){
+	if(escena != 0){
+		escena->animarModeloJearquico();
+	}
+	glutPostRedisplay();
+}
+
 
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla normal
@@ -135,7 +142,10 @@ int main( int argc, char **argv )
    glutKeyboardFunc( normal_keys );
 
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
-   glutSpecialFunc( special_keys );
+	glutIdleFunc(funcion_idle);
+
+	glutSpecialFunc( special_keys );
+
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX

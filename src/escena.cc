@@ -9,11 +9,11 @@
 //**************************************************************************
 //
 
+Material plastico_negro({ 0.02f, 0.02f, 0.02f, 1.0f },{ 0.01f, 0.01f, 0.01f, 1.0f},{0.4f, 0.4f, 0.4f, 1.0f }, 10.0f);
 Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
 Material ruby ({ 0.1745f, 0.01175f, 0.01175f, 0.55f },{0.61424f, 0.04136f, 0.04136f, 0.55f },{0.727811f, 0.626959f, 0.626959f, 0.55f }, 76.8f);
 Material perla({ 0.25f, 0.20725f, 0.20725f, 0.922f }, {1.0f, 0.829f, 0.829f, 0.922f }, {0.296648f, 0.296648f, 0.296648f, 0.922f }, 11.264f);
-Material obsidiana({ 0.05375f, 0.05f, 0.06625f, 0.82f }, { 0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f }, 38.4f
-);
+Material obsidiana({ 0.05375f, 0.05f, 0.06625f, 0.82f }, { 0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f }, 38.4f);
 
 Escena::Escena()
 {
@@ -53,6 +53,12 @@ Escena::Escena()
 
 	 sauron = new Sauron();
 
+	 sauron->cambia_M_Base(plastico_negro);
+	 sauron->cambia_M_Cuerpo(plastico_negro);
+	 sauron->cambia_M_Corona(plastico_negro);
+	 sauron->cambia_M_Nube(perla);
+	 sauron->cambia_M_Ojo(ruby);
+
 }
 
 //**************************************************************************
@@ -83,6 +89,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	cubo->cambiaEstado();
 	esfera->cambiaEstado();
 	esfera->cambiaMaterial(ruby);
+	tetraedro->cambiaMaterial(oro);
 	peon2->cambiaMaterial(obsidiana);
 	peon->cambiaMaterial(perla);
 
@@ -143,10 +150,12 @@ void Escena::enciendeLuces(){
 void Escena::Colores(Tupla3f nuevo_color){
 	cubo->cambiaColor(nuevo_color);
 	peon->cambiaColor(nuevo_color);
+	peon2->cambiaColor(nuevo_color);
 	tetraedro->cambiaColor(nuevo_color);
 	esfera->cambiaColor(nuevo_color);
 	cilindro->cambiaColor(nuevo_color);
 	cono->cambiaColor(nuevo_color);
+	sauron->cambiaColor(nuevo_color);
 
 }
 
@@ -189,7 +198,12 @@ void Escena::dibujaObjetos(){
 	esfera->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
-	sauron->draw();
+	sauron->draw(modoDibujo,ajedrez);
+}
+
+void Escena::animarModeloJearquico(){
+	sauron->animarModelo();
+
 }
 
 //**************************************************************************
@@ -218,20 +232,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
-/*       case 'D' :
+       case 'D' :
          // ESTAMOS EN MODO SELECCION DE DIBUJADO
          modoMenu=SELDIBUJADO;
          break ;
          // COMPLETAR con los diferentes opciones de teclado
-		 case '1' :
-			if(modoMenu == SELDIBUJADO){
-				cout<<"Dibujando en Inmediato"<<endl;
-				modoDibujo = 'I';
-			}
-			else {
-				cout<<"Tecla no válida"<<endl;
-			}
-			break ;
 		 case '2':
 			if(modoMenu == SELDIBUJADO){
 				cout<<"Dibujando en Diferido"<<endl;
@@ -240,11 +245,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else {
 				cout<<"Tecla no válida"<<endl;
 			}
-			break ;*/
+			break ;
 		case 'P' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo puntos"<<endl;
-				comoPuntos = true;
+				comoPuntos = !comoPuntos;
 				luces = false;
 			}
 			else{
@@ -254,7 +259,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'L' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo lineas"<<endl;
-				comoLineas = true;
+				comoLineas = !comoLineas;
 				luces = false;
 			}
 			else{
@@ -264,7 +269,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case 'S' :
 			if(modoMenu == SELVISUALIZACION){
 				cout<<"Dibujando en modo Caras"<<endl;
-				comoTriangulos = true;
+				if(ajedrez){
+					ajedrez = false;
+				}
+				else{
+					comoTriangulos = !comoTriangulos;
+				}
 				luces = false;
 			}
 			else{
@@ -295,6 +305,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			if(modoMenu == SELVISUALIZACION && !luces){
 				cout<<"Dibujando en modo Ajedrez"<<endl;
 				ajedrez = !ajedrez;
+				comoTriangulos = true;
+				luces = false;
 			}
 			else if (luces){
 				cout<<"cambiando angulo alpha"<<endl;
@@ -322,7 +334,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			}
 			break;
 		case '1' :
-			if(luces){
+			if(modoMenu == SELDIBUJADO){
+				cout<<"Dibujando en Inmediato"<<endl;
+				modoDibujo = 'I';
+			}
+			else if(luces){
 				cout<<"Encendiendo luz 1"<<endl;
 				luz1->encenderLuz();
 			}

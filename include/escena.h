@@ -40,7 +40,6 @@ class Escena
 	void enciendeLuces();
 
 
-
    void clear_window();
 
    menu modoMenu=NADA;
@@ -74,6 +73,7 @@ class Escena
     Escena();
 	void inicializar( int UI_window_width, int UI_window_height );
 	void redimensionar( int newWidth, int newHeight ) ;
+	void animarModeloJearquico();
 
 	// Dibujar
 	void dibujar() ;

@@ -31,6 +31,10 @@ Tetraedro::Tetraedro(const float lado)
 		(*it) = inmediato;
 	}
 
+	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
+		(*it) = diferido;
+	}
+
 
 	calculaNormales();
 }

@@ -36,6 +36,9 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) =inmediato;
 	}
+	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
+		(*it) =diferido;
+	}
 
 
 
@@ -62,6 +65,9 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) =inmediato;
+	}
+	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
+		(*it) =diferido;
 	}
 
 	calculaNormales();

@@ -63,14 +63,15 @@ class Malla3D
 
 	Material m;
 
-	Tupla3f inmediato = {0,0,1};
-	Tupla3f diferido = {0,1,0};
+	Tupla3f inmediato = {1,0,1};
+	Tupla3f diferido = {0,0,0};
 
 	GLuint id_vbo_v = 0;
 	GLuint id_vbo_f = 0;
 	GLuint id_vbo_f_p = 0;
 	GLuint id_vbo_c = 0;
 	GLuint id_vbo_ci = 0;
+	GLuint id_vbo_nv = 0;
 
 	bool dibujar = false;
 

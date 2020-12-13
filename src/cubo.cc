@@ -47,6 +47,9 @@ Cubo::Cubo(float lado)
 	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
 		(*it) = inmediato;
 	}
+	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
+		(*it) =diferido;
+	}
 	calculaNormales();
 
 }
