@@ -314,7 +314,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				beta_pulsada = false;
 			}
 			else{
-				cout<<"Tecla no válida"<<endl;
+				cout<<"Desactivando Animaciones"<<endl;
+				sauron->AnimacionCorona();
+				sauron->AnimacionOjo();
+				sauron->AnimacionNube();
 			}
 			break;
 		case 'T' :

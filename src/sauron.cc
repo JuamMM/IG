@@ -38,7 +38,7 @@ void Sauron::draw(char modoDibujo,bool ajedrez){
 		glPopMatrix();
 
 		glPushMatrix();
-		glRotatef(grados_cuerpo,0,1.0,0);
+		glRotatef(grados_nube,0,1.0,0);
 		glTranslatef(50,80,50);
 		glRotatef(-2.0*grados_nube,0,1.0,0);
 		glScalef(10,10,10);
@@ -50,8 +50,14 @@ void Sauron::draw(char modoDibujo,bool ajedrez){
 }
 
 void Sauron::animarModelo(){
-	movimientoOjo();
-	movimientoBase();
+	if(ojo_mueve)
+		movimientoOjo();
+
+	if(corona_mueve)
+		movimientoBase();
+
+	if(nube_mueve)
+		movimientoNube();
 }
 
 void Sauron::movimientoOjo(){
@@ -75,6 +81,10 @@ void Sauron::movimientoOjo(){
 
 void Sauron::movimientoBase(){
 	grados_cuerpo= (grados_cuerpo + 3)%360;
+
+}
+
+void Sauron::movimientoNube(){
 	grados_nube = (grados_nube + 2) %360;
 
 }

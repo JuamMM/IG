@@ -17,6 +17,8 @@ class Sauron{
 		int grados_lib = 0, grados_cuerpo=0, grados_nube = 1;
 		float nube_x = 50, nube_z = 50, rot_nube = 0;
 		bool bajar=false;
+
+		bool corona_mueve, nube_mueve, ojo_mueve;
 	public:
 		Sauron();
 		void draw(char modoDibujo, bool ajedrez);
@@ -53,6 +55,17 @@ class Sauron{
 
 		void movimientoNube();
 
+		void AnimacionCorona(){
+			corona_mueve = !corona_mueve;
+		}
+
+		void AnimacionOjo(){
+			ojo_mueve = !ojo_mueve;
+		}
+
+		void AnimacionNube(){
+			nube_mueve = !nube_mueve;
+		}
 };
 
 #endif
