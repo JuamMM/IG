@@ -242,6 +242,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				cout<<"Dibujando en Diferido"<<endl;
 				modoDibujo = 'D';
 			}
+			else if(modoMenu == SELANIMACION){
+				cout<<"Actiando/Desactivando movimiento nube"<<endl;
+				sauron->AnimacionNube();
+			}
 			else {
 				cout<<"Tecla no válida"<<endl;
 			}
@@ -308,17 +312,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				comoTriangulos = true;
 				luces = false;
 			}
-			else if (luces){
+			else if (luces && modoMenu != SELANIMACION){
 				cout<<"cambiando angulo alpha"<<endl;
 				alpha_pulsada = true;
 				beta_pulsada = false;
 			}
-			else{
+			else if(modoMenu == SELANIMACION){
 				cout<<"Desactivando Animaciones"<<endl;
 				sauron->AnimacionCorona();
 				sauron->AnimacionOjo();
 				sauron->AnimacionNube();
 			}
+			break;
+		case 'M':
+			cout<<"Cambiando a modoAnimacion"<<endl;
+			modoMenu = SELANIMACION;
 			break;
 		case 'T' :
 			cout<<"Cambiando tapas inferiores"<<endl;
@@ -328,9 +336,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			cilindro->ocultaTapas();
 			break;
 		case '0' :
-			if(luces){
+			if(luces && modoMenu != SELANIMACION){
 				cout<<"Encendiendo luz 0"<<endl;
 				luz0->encenderLuz();
+			}
+			else if(modoMenu == SELANIMACION){
+				cout<<"Activando/Desactivando movimiento ojo"<<endl;
+				sauron->AnimacionOjo();
 			}
 			else{
 				cout<<"La iluminacion no está activada"<<endl;
@@ -341,9 +353,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				cout<<"Dibujando en Inmediato"<<endl;
 				modoDibujo = 'I';
 			}
-			else if(luces){
+			else if(luces && modoMenu != SELANIMACION){
 				cout<<"Encendiendo luz 1"<<endl;
 				luz1->encenderLuz();
+			}
+			else if(modoMenu == SELANIMACION){
+				cout<<"Activando/Desactivando movimiento corona"<<endl;
+				sauron->AnimacionCorona();
 			}
 			else{
 				cout<<"La iluminacion no está activada"<<endl;

@@ -14,7 +14,7 @@
 #include "luzdireccional.h"
 #include "sauron.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO,SELANIMACION} menu;
 class Escena
 {
 
