@@ -384,10 +384,19 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			}
 			break;
 		 case 'H':
-			cout<<"Usa la tecla O para pintar los objetos"<<endl;
-			cout<<"Pulsa la tecla T para eliminar/pintar las capas"<<endl;
-			cout<<"La tecla V se emplea para el modo seleccion de visualización, luego P para puntos, L para lineas, A para el modo ajedrez y S para dibujar las caras, I para encender las luces"<<endl;
-			cout<<"La tecla D para el dibujado 1 para modo inmediato y 2 para modo deferido"<<endl;
+			cout<<"Pulsa la tecla V para activar/desactivar el modo visualización."<<endl;
+			cout<<"\t La tecla P activa/desactica el modo puntos."<<endl;
+			cout<<"\t La tecla S activa/desactiva el modo superficie."<<endl;
+			cout<<"\t La tecla L activa/desactiva el modo lineas."<<endl;
+			cout<<"\t La tecla A activa/desactiva el modo ajedrez."<<endl;
+			cout<<"Pula la tecla I para activar/desactivar el modo iluminación."<<endl;
+			cout<<"\t Las teclas 0 y 1 activan/desactivan las respectivas luces."<<endl;
+			cout<<"\t La tecla A activa la variación del ángulo alfa y la B la del ángulo beta."<<endl;
+			cout<<"\t Las teclas < y > incrementan y decrementan respectivamente el ánglo."<<endl;
+			cout<<"La tecla M Permite activar y desactivar los diferentes grados de libertad del modelo."<<endl;
+			cout<<"\t La tecla 0 activa desactiva el movimiento del ojo."<<endl;
+			cout<<"\t La tecla 1 activa desactiva el movimiento de la corona."<<endl;
+			cout<<"\t La tecla 2 activa desactiva el movimiento de la nube."<<endl;
 			break;
 
 
