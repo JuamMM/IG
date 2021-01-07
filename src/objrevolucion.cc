@@ -40,7 +40,11 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 		(*it) =diferido;
 	}
 
+	for(int i=perfil.size()*num_instancias; i< perfil.size()*(num_instancias+1);i++){
+		v[i] = v[i-perfil.size()*num_instancias];
+	}
 
+	calcularTextura();
 
 }
 
@@ -68,6 +72,10 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 	}
 	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
 		(*it) =diferido;
+	}
+
+	for(int i=0;i<perfil.size();i++){
+		v.push_back(perfil[i]);
 	}
 
 	calculaNormales();
@@ -175,12 +183,19 @@ void ObjRevolucion::draw_ModoInmediato()
   glVertexPointer(3,GL_FLOAT,0,v.data());
   glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
 
+
   if(glIsEnabled(GL_LIGHTING)){
 	  glEnableClientState(GL_NORMAL_ARRAY);
 	  glNormalPointer(GL_FLOAT,0,nv.data());
 
-	  m.aplicar();
+//	  m.aplicar();
   }
+
+  if(textura != nullptr){
+		textura->activar();
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+	}
 
   if(tapas){
 	glDrawElements(GL_TRIANGLES,f.size()*3,GL_UNSIGNED_INT,f.data());
@@ -191,10 +206,37 @@ void ObjRevolucion::draw_ModoInmediato()
 
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
+
   if (glIsEnabled(GL_LIGHTING)){
 		  glDisableClientState(GL_NORMAL_ARRAY);
-
 	}
 
+  if (textura != nullptr){
+		  glDisable(GL_TEXTURE_2D);
+		  glDisable(GL_TEXTURE_COORD_ARRAY);
+	}
+
+}
+
+void ObjRevolucion::calcularTextura(){
+
+	ct.resize(v.size());
+	float s,t;
+	float y_min = perfil.front()(1), y_max = perfil.back()(1);
+
+	for(int i=0;i<v.size(); i++){
+		float alpha = atan2(v[i](2),v[i](0));
+		float h = v[i](1);
+
+		s = 1.0 - (alpha/(2*M_PI));
+		s = fmod(s,1);
+		t = (h - y_min)/(y_max -y_min);
+
+		ct[i] = {s,t};
+	}
+
+	for(int i= perfil.size()*num_instancias; i< perfil.size()*(num_instancias+1);i++){
+		ct[i](0) = 1.0f;
+	}
 
 }

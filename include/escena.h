@@ -48,6 +48,7 @@ class Escena
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
 	ObjPLY * modelo = nullptr;
+	ObjRevolucion * lata = nullptr;
 	ObjRevolucion * peon = nullptr;
 	ObjRevolucion * peon2 = nullptr;
 	Cono * cono = nullptr;
@@ -64,6 +65,8 @@ class Escena
 	bool comoTriangulos = true;
 	bool ajedrez = false;
 	bool luces=false;
+	bool texturas=false;
+
 
 	bool alpha_pulsada = false;
 	bool beta_pulsada = false;

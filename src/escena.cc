@@ -34,6 +34,8 @@ Escena::Escena()
 	 peon = new ObjRevolucion("./plys/peon.ply",15,true);
 	 peon2 = new ObjRevolucion("./plys/peon.ply",15,true);
 
+	 lata = new ObjRevolucion("./plys/lata-pcue.ply",15,true);
+
 	 std::vector<Tupla3f> puntos;
 	 puntos.push_back({10,-10,0});
 	 puntos.push_back({0,10,0});
@@ -56,9 +58,8 @@ Escena::Escena()
 	 sauron->cambia_M_Base(plastico_negro);
 	 sauron->cambia_M_Cuerpo(plastico_negro);
 	 sauron->cambia_M_Corona(plastico_negro);
-	 sauron->cambia_M_Nube(perla);
-	 sauron->cambia_M_Ojo(ruby);
 
+	 lata->asignarTextura("./texturas/text-lata-1.jpg");
 }
 
 //**************************************************************************
@@ -80,7 +81,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
-
+/*
 	peon->cambiaEstado();
 	peon2->cambiaEstado();
 	tetraedro->cambiaEstado();
@@ -92,7 +93,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	tetraedro->cambiaMaterial(oro);
 	peon2->cambiaMaterial(obsidiana);
 	peon->cambiaMaterial(perla);
-
+*/
+	lata->cambiaEstado();
 	std::cout<<"Pulsa H para recibir a ayuda"<<std::endl;
 }
 
@@ -110,6 +112,7 @@ void Escena::dibujar()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
 	 glDisable(GL_LIGHTING);
+	 glDisable(GL_TEXTURE);
     ejes.draw();
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
@@ -135,11 +138,11 @@ void Escena::dibujar()
 
 	 if(luces){
 		glEnable(GL_LIGHTING);
+		glEnable(GL_TEXTURE);
 		enciendeLuces();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		dibujaObjetos();
 	 }
-
 }
 
 void Escena::enciendeLuces(){
@@ -155,7 +158,7 @@ void Escena::Colores(Tupla3f nuevo_color){
 	esfera->cambiaColor(nuevo_color);
 	cilindro->cambiaColor(nuevo_color);
 	cono->cambiaColor(nuevo_color);
-	sauron->cambiaColor(nuevo_color);
+//	sauron->cambiaColor(nuevo_color);
 
 }
 
@@ -198,7 +201,11 @@ void Escena::dibujaObjetos(){
 	esfera->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
-	sauron->draw(modoDibujo,ajedrez);
+//	sauron->draw(modoDibujo,ajedrez);
+	glPushMatrix();
+	glScalef(100,100,100);
+	lata->draw(modoDibujo,ajedrez);
+	glPopMatrix();
 }
 
 void Escena::animarModeloJearquico(){
@@ -243,8 +250,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				modoDibujo = 'D';
 			}
 			else if(modoMenu == SELANIMACION){
-				cout<<"Actiando/Desactivando movimiento nube"<<endl;
-				sauron->AnimacionNube();
+				cout<<"Actiando/Desactivando movimiento de la base"<<endl;
+				sauron->AnimacionBase();
 			}
 			else {
 				cout<<"Tecla no válida"<<endl;
@@ -321,7 +328,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				cout<<"Desactivando Animaciones"<<endl;
 				sauron->AnimacionCorona();
 				sauron->AnimacionOjo();
-				sauron->AnimacionNube();
+				sauron->AnimacionBase();
 			}
 			break;
 		case 'M':
@@ -335,13 +342,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			peon->ocultaTapas();
 			cilindro->ocultaTapas();
 			break;
-		case '0' :
+
 			if(luces && modoMenu != SELANIMACION){
 				cout<<"Encendiendo luz 0"<<endl;
 				luz0->encenderLuz();
 			}
 			else if(modoMenu == SELANIMACION){
-				cout<<"Activando/Desactivando movimiento ojo"<<endl;
+				cout<<"Activando/Desactivando movimiento del ojo"<<endl;
 				sauron->AnimacionOjo();
 			}
 			else{

@@ -20,6 +20,11 @@ void Malla3D::draw_ModoInmediato()
 
   glVertexPointer(3,GL_FLOAT,0,v.data());
 
+  if(glIsEnabled(GL_TEXTURE)){
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+	}
+
   if(glIsEnabled(GL_LIGHTING)){
 	  glEnableClientState(GL_NORMAL_ARRAY);
 	  glNormalPointer(GL_FLOAT,0,nv.data());
@@ -36,7 +41,9 @@ void Malla3D::draw_ModoInmediato()
 
   if (glIsEnabled(GL_LIGHTING)){
 		  glDisableClientState(GL_NORMAL_ARRAY);
-
+	}
+  if (glIsEnabled(GL_TEXTURE)){
+		  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
 }
@@ -237,11 +244,9 @@ void Malla3D::calculaNormales(){
 		m = a.cross(b);
 
 		if(m.lengthSq() !=0){
-		normal = m;
-
-		nv[(*it)(0)] = nv[(*it)(0)] + normal;
-		nv[(*it)(1)] = nv[(*it)(1)] + normal;
-		nv[(*it)(2)] = nv[(*it)(2)] + normal;
+			nv[(*it)(0)] = nv[(*it)(0)] + m;
+			nv[(*it)(1)] = nv[(*it)(1)] + m;
+			nv[(*it)(2)] = nv[(*it)(2)] + m;
 		}
 
 	}
@@ -252,6 +257,14 @@ void Malla3D::calculaNormales(){
 		}
 	}
 
+}
+
+void Malla3D::calcularTextura(){
+	ct.resize(v.size());
+
+	for(int i = 0; i< ct.size(); i++){
+		ct[i] = {v[i](0), v[i](1)};
+	}
 }
 
 GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram){

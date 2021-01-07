@@ -31,4 +31,5 @@ Cilindro::Cilindro(float altura, float radio, bool tapas, int num_instancias){
 	}
 
 	calculaNormales();
+	calcularTextura();
 }

@@ -41,6 +41,7 @@ class ObjRevolucion : public Malla3D
     void crearMalla(char sentido);
 	 void ocultaTapas();
 	 void draw_ModoInmediato();
+	 void calcularTextura();
 
 } ;
 

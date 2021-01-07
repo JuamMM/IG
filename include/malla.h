@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "textura.h"
 #include "material.h"
 
 // *****************************************************************************
@@ -44,6 +45,11 @@ class Malla3D
    void draw(char modo, bool dibujar_Ajedrez) ;
 	void calculaNormales();
 
+	void calcularTextura();
+	void asignarTextura(std::string tex){
+		textura = new Textura(tex);
+	}
+
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
 
@@ -59,7 +65,11 @@ class Malla3D
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
 	std::vector<Tupla3f> c_inmediato; // completar: tabla de colores, tabla de normales de vértices
 	std::vector<Tupla3f> c_diferido;
+	//Iluminación.
 	std::vector<Tupla3f> nv;
+	//Textura
+	std::vector<Tupla2f> ct;
+	Textura *textura = nullptr;
 
 	Material m;
 
