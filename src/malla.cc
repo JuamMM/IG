@@ -29,7 +29,7 @@ void Malla3D::draw_ModoInmediato()
 	  glEnableClientState(GL_NORMAL_ARRAY);
 	  glNormalPointer(GL_FLOAT,0,nv.data());
 
-	  m.aplicar();
+	  	m.aplicar();
   }
 
   glColorPointer(3,GL_FLOAT,0,c_inmediato.data());
@@ -262,8 +262,8 @@ void Malla3D::calculaNormales(){
 void Malla3D::calcularTextura(){
 	ct.resize(v.size());
 
-	for(int i = 0; i< ct.size(); i++){
-		ct[i] = {v[i](0), v[i](1)};
+	for(int i = 0; i< v.size(); i++){
+		ct[i] = {v[i](0), (v[i](1))};
 	}
 }
 

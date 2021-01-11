@@ -44,6 +44,26 @@ class Sauron{
 			cuerpo->cambiaMaterial(material);
 		}
 
+		void cambia_T_Ojo(std::string tex){
+			corona->cambia_T_CoronaO(tex);
+		}
+
+		void cambia_T_Cornea(std::string tex){
+			corona->cambia_T_CoronaCo(tex);
+		}
+
+		void cambia_T_Corona(std::string tex){
+			corona->cambia_T_CoronaC(tex);
+		}
+
+		void cambia_T_Base(std::string tex){
+			base->asignarTextura(tex);
+		}
+
+		void cambia_T_Cuerpo(std::string tex){
+			cuerpo->asignarTextura(tex);
+		}
+
 		void cambiaColor(Tupla3f nuevo_color){
 			corona->cambiaColor(nuevo_color);
 			base->cambiaColor(nuevo_color);

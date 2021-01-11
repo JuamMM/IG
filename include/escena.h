@@ -49,6 +49,8 @@ class Escena
    Tetraedro * tetraedro= nullptr ; // es importante inicializarlo a 'nullptr'
 	ObjPLY * modelo = nullptr;
 	ObjRevolucion * lata = nullptr;
+	ObjRevolucion * p_inf = nullptr;
+	ObjRevolucion * p_sup = nullptr;
 	ObjRevolucion * peon = nullptr;
 	ObjRevolucion * peon2 = nullptr;
 	Cono * cono = nullptr;

@@ -44,7 +44,38 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 		v[i] = v[i-perfil.size()*num_instancias];
 	}
 
-	calcularTextura();
+
+}
+
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapas, char tipo) {
+	ply::read_vertices(archivo, this->perfil);
+
+
+	this->v = this->perfil;
+	polo_sur = {0,perfil[0](1),0};
+	int tam = perfil.size()-1;
+	polo_norte = {0,perfil[tam](1),0};
+	this->num_instancias = num_instancias;
+
+
+	this->tapas = tapas;
+	crearMalla('y');
+
+	c_inmediato.resize(v.size());
+	c_diferido.resize(v.size());
+
+	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
+		(*it) =inmediato;
+	}
+	for(auto it = c_diferido.begin(); it != c_diferido.end(); it++){
+		(*it) =diferido;
+	}
+
+	for(int i=perfil.size()*num_instancias; i< perfil.size()*(num_instancias+1);i++){
+		v[i] = v[i-perfil.size()*num_instancias];
+	}
+
+	calcularTextura(tipo);
 
 }
 
@@ -188,7 +219,8 @@ void ObjRevolucion::draw_ModoInmediato()
 	  glEnableClientState(GL_NORMAL_ARRAY);
 	  glNormalPointer(GL_FLOAT,0,nv.data());
 
-//	  m.aplicar();
+
+	  m.aplicar();
   }
 
   if(textura != nullptr){
@@ -218,25 +250,44 @@ void ObjRevolucion::draw_ModoInmediato()
 
 }
 
-void ObjRevolucion::calcularTextura(){
+void ObjRevolucion::calcularTextura(char tipo){
 
 	ct.resize(v.size());
 	float s,t;
 	float y_min = perfil.front()(1), y_max = perfil.back()(1);
 
-	for(int i=0;i<v.size(); i++){
-		float alpha = atan2(v[i](2),v[i](0));
-		float h = v[i](1);
+	switch(tipo){
+		case 'C':
+			for(int i=0;i<v.size(); i++){
+				float alpha = atan2(v[i](2),v[i](0));
+				float h = v[i](1);
 
-		s = 1.0 - (alpha/(2*M_PI));
-		s = fmod(s,1);
-		t = (h - y_min)/(y_max -y_min);
+				s = 1.0 - (alpha/(2*M_PI));
+				s = fmod(s,1);
+				t = (h - y_min)/(y_max -y_min);
 
-		ct[i] = {s,t};
+				ct[i] = {s,t};
+			}
+
+		break;
+
+		case 'E':
+			for(int i=0;i<v.size(); i++){
+				float alpha = atan2(v[i](2),v[i](0));
+				float beta = atan2(v[i](1),sqrt(pow(v[i](0),2)+pow(v[i](2),2)));
+
+				s = 1.0 - (alpha/(2*M_PI));
+				s = fmod(s,1);
+
+				t = 1.0 - (beta/(M_PI));
+				t = fmod(s,1);
+
+				ct[i] = {s,t};
+			}
+		break;
 	}
 
-	for(int i= perfil.size()*num_instancias; i< perfil.size()*(num_instancias+1);i++){
-		ct[i](0) = 1.0f;
-	}
-
+		for(int i= perfil.size()*num_instancias; i< perfil.size()*(num_instancias+1);i++){
+				ct[i](0) = 1.0f;
+			}
 }

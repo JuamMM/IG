@@ -34,7 +34,9 @@ Escena::Escena()
 	 peon = new ObjRevolucion("./plys/peon.ply",15,true);
 	 peon2 = new ObjRevolucion("./plys/peon.ply",15,true);
 
-	 lata = new ObjRevolucion("./plys/lata-pcue.ply",15,true);
+	 lata = new ObjRevolucion("./plys/lata-pcue.ply",15,true,'C');
+	 p_inf = new ObjRevolucion("./plys/lata-pinf.ply",15,true);
+	 p_sup = new ObjRevolucion("./plys/lata-psup.ply",15,true);
 
 	 std::vector<Tupla3f> puntos;
 	 puntos.push_back({10,-10,0});
@@ -60,6 +62,13 @@ Escena::Escena()
 	 sauron->cambia_M_Corona(plastico_negro);
 
 	 lata->asignarTextura("./texturas/text-lata-1.jpg");
+	 cubo->asignarTextura("./texturas/text-madera.jpg");
+
+	 sauron->cambia_T_Cuerpo("./texturas/text-piedra.jpg");
+	 sauron->cambia_T_Base("./texturas/text-piedra.jpg");
+	 sauron->cambia_T_Corona("./texturas/text-piedra.jpg");
+	 sauron->cambia_T_Ojo("./texturas/tex-fuego.jpg");
+	 sauron->cambia_T_Corona("./texturas/text-piedra.jpg");
 }
 
 //**************************************************************************
@@ -81,20 +90,30 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
-/*
+
 	peon->cambiaEstado();
 	peon2->cambiaEstado();
 	tetraedro->cambiaEstado();
 	cono->cambiaEstado();
 	cilindro->cambiaEstado();
-	cubo->cambiaEstado();
 	esfera->cambiaEstado();
 	esfera->cambiaMaterial(ruby);
 	tetraedro->cambiaMaterial(oro);
 	peon2->cambiaMaterial(obsidiana);
 	peon->cambiaMaterial(perla);
-*/
+	lata->cambiaMaterial(perla);
+
+	sauron->cambia_M_Base(obsidiana);
+	sauron->cambia_M_Cuerpo(obsidiana);
+	sauron->cambia_M_Ojo(ruby);
+
+	cubo->cambiaEstado();
 	lata->cambiaEstado();
+	p_inf->cambiaEstado();
+	p_sup->cambiaEstado();
+	lata->cambiaColor({1,1,1});
+	p_inf->cambiaColor({1,1,1});
+	p_sup->cambiaColor({1,1,1});
 	std::cout<<"Pulsa H para recibir a ayuda"<<std::endl;
 }
 
@@ -158,7 +177,7 @@ void Escena::Colores(Tupla3f nuevo_color){
 	esfera->cambiaColor(nuevo_color);
 	cilindro->cambiaColor(nuevo_color);
 	cono->cambiaColor(nuevo_color);
-//	sauron->cambiaColor(nuevo_color);
+	sauron->cambiaColor(nuevo_color);
 
 }
 
@@ -201,8 +220,22 @@ void Escena::dibujaObjetos(){
 	esfera->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
-//	sauron->draw(modoDibujo,ajedrez);
+	sauron->draw(modoDibujo,ajedrez);
+
 	glPushMatrix();
+	glTranslatef(40,10,-40);
+	glScalef(100,100,100);
+	p_inf->draw(modoDibujo,ajedrez);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(40,11,-40);
+	glScalef(100,100,100);
+	p_sup->draw(modoDibujo,ajedrez);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(40,10,-40);
 	glScalef(100,100,100);
 	lata->draw(modoDibujo,ajedrez);
 	glPopMatrix();

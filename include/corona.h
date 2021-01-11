@@ -32,6 +32,18 @@ class Corona{
 			cornea->cambiaMaterial(material);
 		}
 
+		void cambia_T_CoronaC(std::string tex){
+			cuernos->asignarTextura(tex);
+		}
+
+		void cambia_T_CoronaO(std::string tex){
+			ojo->asignarTextura(tex);
+		}
+
+		void cambia_T_CoronaCo(std::string tex){
+			cornea->asignarTextura(tex);
+		}
+
 		void cambiaColor(Tupla3f nuevo_color){
 			ojo->cambiaColor(nuevo_color);
 			cornea->cambiaColor(nuevo_color);

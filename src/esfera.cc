@@ -25,6 +25,7 @@ Esfera::Esfera(int num_instancias, int radio, bool tapas){
 		(*it) =diferido;
 	}
 	calculaNormales();
+	calcularTextura('E');
 }
 
 void Esfera::crearPerfil(int radio){

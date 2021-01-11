@@ -37,11 +37,12 @@ class ObjRevolucion : public Malla3D
    public:
        ObjRevolucion();
    ObjRevolucion(const std::string & archivo, int num_instancias, bool tapas) ;
+   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapasi, char tipo) ;
    ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapas) ;
     void crearMalla(char sentido);
 	 void ocultaTapas();
 	 void draw_ModoInmediato();
-	 void calcularTextura();
+	 void calcularTextura(char tipo);
 
 } ;
 
