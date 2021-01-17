@@ -94,6 +94,18 @@ void special_keys( int tecla, int x, int y )
 	glutPostRedisplay();
 }
 
+void clickRaton(int boton, int estado, int x, int y){
+   if( escena != NULL)
+      escena->clickRaton(boton, estado, x, y);
+   glutPostRedisplay();
+}
+
+void ratonMovido(int x, int y){
+   if( escena != NULL )
+      escena->ratonMovido(x,y);
+   glutPostRedisplay();
+}
+
 //***************************************************************************
 // Programa principal
 //
@@ -162,6 +174,8 @@ int main( int argc, char **argv )
    // funcion de inicialización de la escena (necesita que esté la ventana creada)
    escena->inicializar( UI_window_width, UI_window_height );
 
+   glutMouseFunc(clickRaton);
+   glutMotionFunc(ratonMovido);
 
 
    // ejecutar del bucle de eventos

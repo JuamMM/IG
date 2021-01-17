@@ -13,8 +13,9 @@
 #include "luzposicional.h"
 #include "luzdireccional.h"
 #include "sauron.h"
+#include "camara.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO,SELANIMACION} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO,SELANIMACION, CAMARA} menu;
 class Escena
 {
 
@@ -59,7 +60,9 @@ class Escena
 	LuzPosicional * luz0 = nullptr;
 	LuzDireccional * luz1 = nullptr;
 
+	int camara_activa = 0;
 	Sauron * sauron = nullptr;
+
 
 	char modoDibujo = 'I';
 	bool comoPuntos = false;
@@ -73,6 +76,11 @@ class Escena
 	bool alpha_pulsada = false;
 	bool beta_pulsada = false;
 
+	std::vector<Camara> camaras;
+
+	bool raton_pulsado=false;
+	int x_mov=0;
+	int y_mov=0;
    public:
 
     Escena();
@@ -87,6 +95,9 @@ class Escena
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+
+	void clickRaton(int boton, int estado, int x, int y);
+	void ratonMovido(int x, int y);
 
 };
 #endif

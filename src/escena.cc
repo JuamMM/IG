@@ -69,6 +69,27 @@ Escena::Escena()
 	 sauron->cambia_T_Corona("./texturas/text-piedra.jpg");
 	 sauron->cambia_T_Ojo("./texturas/tex-fuego.jpg");
 	 sauron->cambia_T_Corona("./texturas/text-piedra.jpg");
+
+	Camara cam1({150,0,0},{0,0,0},{1,1,0}, ORTOGONAL, Front_plane, Back_plane);
+	Camara cam2({100,0,0},{0,0,0},{1,1,0}, PERSPECTIVA, Front_plane, Back_plane);
+	Camara cam3({200,0,100},{0,0,0},{1,0,0}, ORTOGONAL, Front_plane, Back_plane);
+	Camara cam4({150,100,0},{0,0,0},{0,0,1}, PERSPECTIVA, Front_plane, Back_plane);
+	Camara cam5({150,100,0},{0,0,0},{0,0,1}, ORTOGONAL, Front_plane, Back_plane);
+
+	camara_activa = 0;
+
+	camaras.push_back(cam1);
+	camaras.push_back(cam2);
+	camaras.push_back(cam3);
+	camaras.push_back(cam4);
+	camaras.push_back(cam5);
+
+	for(int i=0;i< camaras.size();i++){
+		camaras[i].setIzquierda(25);
+		camaras[i].setDerecha(-25);
+		camaras[i].setAbajo(-25);
+		camaras[i].setTop(25);
+	}
 }
 
 //**************************************************************************
@@ -261,6 +282,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    bool salir=false;
    switch( toupper(tecla) )
    {
+		case 'C':
+			modoMenu = CAMARA;
+			break;
       case 'Q' :
          if (modoMenu!=NADA)
             modoMenu=NADA;
@@ -285,6 +309,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else if(modoMenu == SELANIMACION){
 				cout<<"Actiando/Desactivando movimiento de la base"<<endl;
 				sauron->AnimacionBase();
+			}
+			else if(modoMenu == CAMARA){
+				cout<<"Cambiando a camara 2"<<endl;
+				camara_activa = 2;
 			}
 			else {
 				cout<<"Tecla no válida"<<endl;
@@ -388,6 +416,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				cout<<"La iluminacion no está activada"<<endl;
 			}
 			break;
+		case '0':
+			if(modoMenu == CAMARA){
+				cout<<"Cambiando a Cámara 0"<<endl;
+				camara_activa = 0;
+			}
+			break;
 		case '1' :
 			if(modoMenu == SELDIBUJADO){
 				cout<<"Dibujando en Inmediato"<<endl;
@@ -401,8 +435,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				cout<<"Activando/Desactivando movimiento corona"<<endl;
 				sauron->AnimacionCorona();
 			}
-			else{
-				cout<<"La iluminacion no está activada"<<endl;
+			else if(modoMenu == CAMARA){
+				cout<<"Cambiando a camara 1"<<endl;
+				camara_activa = 1;
 			}
 			break;
 		case	'<':
@@ -489,8 +524,9 @@ void Escena::change_projection( const float ratio_xy )
 {
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
-   const float wx = float(Height)*ratio_xy ;
-   glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
+   //const float wx = float(Height)*ratio_xy ;
+   //glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
+	camaras[camara_activa].setProyeccion();
 }
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
@@ -510,10 +546,36 @@ void Escena::redimensionar( int newWidth, int newHeight )
 
 void Escena::change_observer()
 {
-   // posicion del observador
+/*   // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    glTranslatef( 0.0, 0.0, -Observer_distance );
    glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
-   glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+   glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );*/
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	camaras[camara_activa].setObservador();
+
+}
+
+void Escena::clickRaton(int boton, int estado, int x, int y){
+	if(boton = GLUT_RIGHT_BUTTON){
+		if(estado == GLUT_DOWN){
+			x_mov = x;
+			y_mov = y;
+			raton_pulsado = true;
+		}
+		else{
+			raton_pulsado = false;
+		}
+	}
+}
+
+void Escena::ratonMovido(int x, int y){
+	if( raton_pulsado ){
+		camaras[camara_activa].girar(x-x_mov,y-y_mov);
+		x_mov = x;
+		y_mov = y;
+	}
 }
