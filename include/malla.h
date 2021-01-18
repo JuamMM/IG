@@ -50,7 +50,14 @@ class Malla3D
 		textura = new Textura(tex);
 	}
 
+	void calcularCentro();
+	Tupla3f devuelveCentro();
+
 	GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
+
+	void ajustaCentro(Tupla3f ajuste){
+		centro = centro + ajuste;
+	}
 
 
 
@@ -85,6 +92,7 @@ class Malla3D
 
 	bool dibujar = false;
 
+	Tupla3f centro = {0,0,0};
 
 } ;
 

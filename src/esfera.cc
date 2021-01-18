@@ -4,6 +4,7 @@
 
 Esfera::Esfera(int num_instancias, int radio, bool tapas){
 
+	this->radio = radio;
 	crearPerfil(radio);
 	v = perfil;
 	polo_sur = {0,perfil[0](1),0};
@@ -26,6 +27,7 @@ Esfera::Esfera(int num_instancias, int radio, bool tapas){
 	}
 	calculaNormales();
 	calcularTextura('E');
+	calcularCentro();
 }
 
 void Esfera::crearPerfil(int radio){

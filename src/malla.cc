@@ -279,3 +279,15 @@ GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero
 void Malla3D::cambiaMaterial(Material material){
 	m = material;
 }
+
+void Malla3D::calcularCentro(){
+	for(auto it = v.begin(); it != v.end(); it++){
+		centro = centro + (*it);
+	}
+
+	centro = centro /v.size();
+}
+
+Tupla3f Malla3D::devuelveCentro(){
+	return centro;
+}

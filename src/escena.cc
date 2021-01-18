@@ -70,11 +70,11 @@ Escena::Escena()
 	 sauron->cambia_T_Ojo("./texturas/tex-fuego.jpg");
 	 sauron->cambia_T_Corona("./texturas/text-piedra.jpg");
 
-	Camara cam1({150,0,0},{0,0,0},{1,1,0}, ORTOGONAL, Front_plane, Back_plane);
-	Camara cam2({100,0,0},{0,0,0},{1,1,0}, PERSPECTIVA, Front_plane, Back_plane);
-	Camara cam3({200,0,100},{0,0,0},{1,0,0}, ORTOGONAL, Front_plane, Back_plane);
-	Camara cam4({150,100,0},{0,0,0},{0,0,1}, PERSPECTIVA, Front_plane, Back_plane);
-	Camara cam5({150,100,0},{0,0,0},{0,0,1}, ORTOGONAL, Front_plane, Back_plane);
+	Camara cam1({300,0,0},{0,0,0},{1,1,0}, ORTOGONAL, Front_plane, Back_plane);
+	Camara cam2({400,0,0},{0,0,0},{1,1,0}, PERSPECTIVA, Front_plane, Back_plane);
+	Camara cam3({300,0,100},{0,0,0},{1,0,0}, ORTOGONAL, Front_plane, Back_plane);
+	Camara cam4({450,100,0},{0,0,0},{0,0,1}, PERSPECTIVA, Front_plane, Back_plane);
+	Camara cam5({450,100,0},{0,0,0},{0,0,1}, ORTOGONAL, Front_plane, Back_plane);
 
 	camara_activa = 0;
 
@@ -85,11 +85,12 @@ Escena::Escena()
 	camaras.push_back(cam5);
 
 	for(int i=0;i< camaras.size();i++){
-		camaras[i].setIzquierda(25);
-		camaras[i].setDerecha(-25);
-		camaras[i].setAbajo(-25);
-		camaras[i].setTop(25);
+		camaras[i].setIzquierda(75);
+		camaras[i].setDerecha(-75);
+		camaras[i].setAbajo(-75);
+		camaras[i].setTop(75);
 	}
+	esfera->ajustaCentro({40,0,-30});
 }
 
 //**************************************************************************
@@ -109,7 +110,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
-   change_projection( float(UI_window_width)/float(UI_window_height) );
+   change_projection( );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 
 	peon->cambiaEstado();
@@ -313,6 +314,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else if(modoMenu == CAMARA){
 				cout<<"Cambiando a camara 2"<<endl;
 				camara_activa = 2;
+				change_projection();
+				change_observer();
 			}
 			else {
 				cout<<"Tecla no válida"<<endl;
@@ -420,6 +423,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			if(modoMenu == CAMARA){
 				cout<<"Cambiando a Cámara 0"<<endl;
 				camara_activa = 0;
+				change_projection();
+				change_observer();
 			}
 			break;
 		case '1' :
@@ -438,6 +443,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else if(modoMenu == CAMARA){
 				cout<<"Cambiando a camara 1"<<endl;
 				camara_activa = 1;
+				change_projection();
+				change_observer();
 			}
 			break;
 		case	'<':
@@ -458,13 +465,65 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				luz1->variarAnguloBeta(-5.0f);
 			}
 			break;
+		case '3':
+			if(modoMenu ==CAMARA){
+				cout<<"cambiando a camara 3"<<endl;
+				camara_activa =3;
+				change_projection();
+				change_observer();
+			}
+			break;
+		case '4':
+			if(modoMenu ==CAMARA){
+				cout<<"cambiando a camara 4"<<endl;
+				camara_activa =4;
+				change_projection();
+				change_observer();
+			}
+			break;
+		case '5':
+			if(modoMenu ==CAMARA){
+				cout<<"cambiando a camara 5"<<endl;
+				camara_activa =5;
+				change_projection();
+				change_observer();
+			}
+			break;
+		case '+':
+			if(modoMenu == CAMARA){
+				cout<<"Aumentando zoom camara "<<camara_activa<<endl;
+				camaras[camara_activa].zoom(1.5);
+				change_projection();
+				change_observer();
+			}
+			break;
+		case '-':
+			if(modoMenu == CAMARA){
+				cout<<"Decrementando zoom camara "<<camara_activa<<endl;
+				camaras[camara_activa].zoom(0.5);
+				change_projection();
+				change_observer();
+			}
+			break;
+		case 'E':
+			if(modoMenu == CAMARA){
+				cout<<"Enfocando a la esfera"<<endl;
+
+				camaras[camara_activa].setEn(esfera->devuelveCentro());
+				camaras[camara_activa].asignaObjeto(ESFERA);
+
+				change_projection();
+				change_observer();
+			}
+			break;
+
 		 case 'H':
 			cout<<"Pulsa la tecla V para activar/desactivar el modo visualización."<<endl;
 			cout<<"\t La tecla P activa/desactica el modo puntos."<<endl;
 			cout<<"\t La tecla S activa/desactiva el modo superficie."<<endl;
 			cout<<"\t La tecla L activa/desactiva el modo lineas."<<endl;
 			cout<<"\t La tecla A activa/desactiva el modo ajedrez."<<endl;
-			cout<<"Pula la tecla I para activar/desactivar el modo iluminación."<<endl;
+			cout<<"Pulsa la tecla I para activar/desactivar el modo iluminación."<<endl;
 			cout<<"\t Las teclas 0 y 1 activan/desactivan las respectivas luces."<<endl;
 			cout<<"\t La tecla A activa la variación del ángulo alfa y la B la del ángulo beta."<<endl;
 			cout<<"\t Las teclas < y > incrementan y decrementan respectivamente el ánglo."<<endl;
@@ -509,6 +568,7 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
          Observer_distance /= 1.2 ;
          break;
 	}
+	change_projection();
 
 	//std::cout << Observer_distance << std::endl;
 }
@@ -520,7 +580,7 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
 //
 //***************************************************************************
 
-void Escena::change_projection( const float ratio_xy )
+void Escena::change_projection( /*const float ratio_xy*/ )
 {
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
@@ -536,7 +596,7 @@ void Escena::redimensionar( int newWidth, int newHeight )
 {
    Width  = newWidth/10;
    Height = newHeight/10;
-   change_projection( float(newHeight)/float(newWidth) );
+   change_projection( );
    glViewport( 0, 0, newWidth, newHeight );
 }
 

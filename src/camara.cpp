@@ -16,8 +16,30 @@ void Camara::rotarXExaminar(float angulo){
 	ojo = ojo-en;
 	Tupla3f ojo_aux = ojo;
 
-	ojo(1) = ojo_aux(1)*cos(angulo) - ojo_aux(2)*sin(angulo);
+	ojo(1) = ojo_aux(1)*cos(angulo) + ojo_aux(2)*sin(angulo);
 	ojo(2) = ojo_aux(1)*sin(angulo) + ojo_aux(2)*cos(angulo);
+
+	ojo = ojo+en;
+
+}
+
+void Camara::rotarYExaminar(float angulo){
+	ojo = ojo-en;
+	Tupla3f ojo_aux = ojo;
+
+	ojo(0) = ojo_aux(0)*cos(angulo) - ojo_aux(2)*sin(angulo);
+	ojo(2) = ojo_aux(0)*-1*sin(angulo) + ojo_aux(2)*cos(angulo);
+
+	ojo = ojo+en;
+
+}
+
+void Camara::rotarZExaminar(float angulo){
+	ojo = ojo-en;
+	Tupla3f ojo_aux = ojo;
+
+	ojo(0) = ojo_aux(0)*cos(angulo) + ojo_aux(1)*sin(angulo);
+	ojo(1) = ojo_aux(0)*sin(angulo) + ojo_aux(1)*cos(angulo);
 
 	ojo = ojo+en;
 
@@ -43,6 +65,16 @@ void Camara::rotarYPrimeraPersona(float angulo){
 
 	en = en+ojo;
 
+}
+
+void Camara::rotarZPrimeraPersona(float angulo){
+	en = en-ojo;
+	Tupla3f en_aux = en;
+
+	en(0) = en_aux(0)*cos(angulo) - en(1)*sin(angulo);
+	en(1) = en_aux(0)*sin(angulo) + en(1)*cos(angulo);
+
+	en = en+ojo;
 }
 
 /*Creación de la matriz de visualización de la cámara
@@ -74,6 +106,19 @@ void Camara::setProyeccion(){
 }
 
 void Camara::girar(float x, float y){
-	rotarXPrimeraPersona(-y*0.25*M_PI/180.0);
-	rotarYPrimeraPersona(-x*0.25*M_PI/180.0);
+	if(mirar == NINGUNO){
+		rotarXPrimeraPersona(-y*0.25*M_PI/180.0);
+		rotarYPrimeraPersona(-x*0.25*M_PI/180.0);
+	}
+	else{
+		rotarXExaminar(-y*0.25*M_PI/180.0);
+		rotarYExaminar(-x*0.25*M_PI/180.0);
+	}
+
+
+}
+
+void Camara::girarObjeto(float x, float y){
+	rotarXExaminar(-y*0.25*M_PI/180.0);
+	rotarYExaminar(-x*0.25*M_PI/180.0);
 }
