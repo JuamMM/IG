@@ -13,6 +13,7 @@
 #include "aux.h"
 #include "textura.h"
 #include "material.h"
+#include "camara.h"
 
 // *****************************************************************************
 //
@@ -59,7 +60,18 @@ class Malla3D
 		centro = centro + ajuste;
 	}
 
+	Tupla3f colorObjeto(){
+		return inmediato;
+	}
 
+	void aplicarColorSeleccion();
+
+	void cambiaColorInmediato(Tupla3f nuevo_color){
+		inmediato = nuevo_color;
+		cambiaColor(inmediato);
+	}
+
+	objeto tipo;
 
    protected:
 	virtual void draw_ModoDiferido();
@@ -91,6 +103,7 @@ class Malla3D
 	GLuint id_vbo_nv = 0;
 
 	bool dibujar = false;
+	bool seleccionado = false;
 
 	Tupla3f centro = {0,0,0};
 

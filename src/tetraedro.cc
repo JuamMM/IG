@@ -37,4 +37,5 @@ Tetraedro::Tetraedro(const float lado)
 
 
 	calculaNormales();
+	tipo = TETRAEDRO;
 }

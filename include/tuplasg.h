@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cassert>
 #include <iostream>
+#include <limits>
 
 // constantes para acceder a las componentes de las tuplas
 const unsigned
@@ -102,6 +103,8 @@ class TuplaG
 
    // obtener una copia normalizada
    TuplaG<T,n> normalized() const ;
+
+   inline bool operator == (const TuplaG<T,n> & otra) const;
 } ;
 
 //----------------------------------------------------------------------
@@ -115,6 +118,16 @@ inline TuplaG<T,n> operator *  ( const T & a, const  TuplaG<T,n> & der ) ;
 template< class T, unsigned n >
 inline std::ostream & operator <<  ( std::ostream & os, const TuplaG<T,n> & der ) ;
 
+template <class T, unsigned n>
+inline bool TuplaG<T,n> :: operator == (const TuplaG<T,n> & otra) const
+{
+    bool son_iguales = true;
+
+    for (uint32_t i = 0; son_iguales && i < n; i++)
+        son_iguales = abs((*this)[i] - otra[i]) < std::numeric_limits<double>::epsilon();
+
+    return son_iguales;
+}
 // *********************************************************************
 //
 // Plantilla de clase: TuplaG2

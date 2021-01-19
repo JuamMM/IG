@@ -8,12 +8,21 @@
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
 //
+//
+
+
 
 Material plastico_negro({ 0.02f, 0.02f, 0.02f, 1.0f },{ 0.01f, 0.01f, 0.01f, 1.0f},{0.4f, 0.4f, 0.4f, 1.0f }, 10.0f);
 Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
 Material ruby ({ 0.1745f, 0.01175f, 0.01175f, 0.55f },{0.61424f, 0.04136f, 0.04136f, 0.55f },{0.727811f, 0.626959f, 0.626959f, 0.55f }, 76.8f);
 Material perla({ 0.25f, 0.20725f, 0.20725f, 0.922f }, {1.0f, 0.829f, 0.829f, 0.922f }, {0.296648f, 0.296648f, 0.296648f, 0.922f }, 11.264f);
 Material obsidiana({ 0.05375f, 0.05f, 0.06625f, 0.82f }, { 0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f }, 38.4f);
+
+Tupla3f amarillo({1,1,0});
+Tupla3f rojo({1,0,0});
+Tupla3f verde({0,1,0});
+Tupla3f azul({0,0,1});
+Tupla3f cian({0,1,1});
 
 Escena::Escena()
 {
@@ -91,6 +100,23 @@ Escena::Escena()
 		camaras[i].setTop(75);
 	}
 	esfera->ajustaCentro({40,0,-30});
+	cubo->ajustaCentro({0,-50,0});
+	peon2->ajustaCentro({30,0,0});
+	tetraedro->ajustaCentro({20,30,0});
+
+	peon2->cambiaColorInmediato(verde);
+	tetraedro->cambiaColorInmediato(azul);
+	esfera->cambiaColorInmediato(rojo);
+	cilindro->cambiaColorInmediato(cian);
+
+	peon2->tipo = PEON;
+	//sauron->cambiaColorInmediato(morado);
+	//
+	objetos_dibujo.push_back(cubo);
+	objetos_dibujo.push_back(tetraedro);
+	objetos_dibujo.push_back(esfera);
+	objetos_dibujo.push_back(cilindro);
+	objetos_dibujo.push_back(peon2);
 }
 
 //**************************************************************************
@@ -113,16 +139,12 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
    change_projection( );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 
-	peon->cambiaEstado();
 	peon2->cambiaEstado();
 	tetraedro->cambiaEstado();
-	cono->cambiaEstado();
 	cilindro->cambiaEstado();
 	esfera->cambiaEstado();
-	esfera->cambiaMaterial(ruby);
 	tetraedro->cambiaMaterial(oro);
 	peon2->cambiaMaterial(obsidiana);
-	peon->cambiaMaterial(perla);
 	lata->cambiaMaterial(perla);
 
 	sauron->cambia_M_Base(obsidiana);
@@ -131,11 +153,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	cubo->cambiaEstado();
 	lata->cambiaEstado();
-	p_inf->cambiaEstado();
-	p_sup->cambiaEstado();
-	lata->cambiaColor({1,1,1});
-	p_inf->cambiaColor({1,1,1});
-	p_sup->cambiaColor({1,1,1});
+
+
 	std::cout<<"Pulsa H para recibir a ayuda"<<std::endl;
 }
 
@@ -160,19 +179,19 @@ void Escena::dibujar()
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
     // y hacer
 	 if(comoPuntos){
-		Colores({1,0,0});
+		//Colores({1,0,0});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 		dibujaObjetos();
 	 }
 
 	 if(comoLineas){
-		Colores({0,0,1});
+		//Colores({0,0,1});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		dibujaObjetos();
 	 }
 
 	 if(comoTriangulos){
-		Colores({0,1,0});
+		//Colores({0,1,0});
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		dibujaObjetos();
 	 }
@@ -193,12 +212,10 @@ void Escena::enciendeLuces(){
 
 void Escena::Colores(Tupla3f nuevo_color){
 	cubo->cambiaColor(nuevo_color);
-	peon->cambiaColor(nuevo_color);
 	peon2->cambiaColor(nuevo_color);
 	tetraedro->cambiaColor(nuevo_color);
 	esfera->cambiaColor(nuevo_color);
 	cilindro->cambiaColor(nuevo_color);
-	cono->cambiaColor(nuevo_color);
 	sauron->cambiaColor(nuevo_color);
 
 }
@@ -207,60 +224,32 @@ void Escena::dibujaObjetos(){
 
 	glPushMatrix();
 	glTranslatef(0,-50,0);
-	cubo->draw(modoDibujo,ajedrez);
+	objetos_dibujo[0]->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(20,30,0);
-	tetraedro->draw(modoDibujo,ajedrez);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-30,0,0);
-	glScalef(15,15,15);
-	peon->draw(modoDibujo,ajedrez);
+	objetos_dibujo[1]->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(30,0,0);
 	glScalef(15,15,15);
-	peon2->draw(modoDibujo,ajedrez);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0,0,30);
-	cono->draw(modoDibujo,ajedrez);
+	objetos_dibujo[4]->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0,0,-30);
-	cilindro->draw(modoDibujo,ajedrez);
+	objetos_dibujo[3]->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(40,0,-30);
-	esfera->draw(modoDibujo,ajedrez);
+	objetos_dibujo[2]->draw(modoDibujo,ajedrez);
 	glPopMatrix();
 
 	sauron->draw(modoDibujo,ajedrez);
 
-	glPushMatrix();
-	glTranslatef(40,10,-40);
-	glScalef(100,100,100);
-	p_inf->draw(modoDibujo,ajedrez);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(40,11,-40);
-	glScalef(100,100,100);
-	p_sup->draw(modoDibujo,ajedrez);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(40,10,-40);
-	glScalef(100,100,100);
-	lata->draw(modoDibujo,ajedrez);
-	glPopMatrix();
 }
 
 void Escena::animarModeloJearquico(){
@@ -505,17 +494,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 				change_observer();
 			}
 			break;
-		case 'E':
-			if(modoMenu == CAMARA){
-				cout<<"Enfocando a la esfera"<<endl;
-
-				camaras[camara_activa].setEn(esfera->devuelveCentro());
-				camaras[camara_activa].asignaObjeto(ESFERA);
-
-				change_projection();
-				change_observer();
-			}
-			break;
 
 		 case 'H':
 			cout<<"Pulsa la tecla V para activar/desactivar el modo visualización."<<endl;
@@ -620,7 +598,7 @@ void Escena::change_observer()
 }
 
 void Escena::clickRaton(int boton, int estado, int x, int y){
-	if(boton = GLUT_RIGHT_BUTTON){
+	if(boton == GLUT_RIGHT_BUTTON){
 		if(estado == GLUT_DOWN){
 			x_mov = x;
 			y_mov = y;
@@ -630,6 +608,59 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
 			raton_pulsado = false;
 		}
 	}
+	if(boton == GLUT_LEFT_BUTTON){
+		if(estado == GLUT_UP){
+			Seleccion(x,y);
+		}
+	}
+}
+
+void Escena::Seleccion(int x, int y){
+
+	glDisable(GL_DITHER);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+
+	GLint viewport[4];
+	GLfloat pixels[3];
+	Tupla3f color;
+
+	glGetIntegerv(GL_VIEWPORT,viewport);
+	glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_FLOAT,pixels);
+
+	color = {pixels[0], pixels[1], pixels[2]};
+
+
+	if(cubo->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(CUBO);
+	}
+	else if(peon2->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(PEON);
+	}
+	else if(tetraedro->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(TETRAEDRO);
+	}
+	else if(esfera->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(ESFERA);
+	}
+	else if(cilindro->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(CILINDRO);
+	}
+
+	for(int i=0; i<objetos_dibujo.size(); i++){
+		if(objetos_dibujo[i]->tipo == camaras[camara_activa].MirandoA()){
+			objetos_dibujo[i]->cambiaColor(amarillo);
+
+			camaras[camara_activa].setEn(objetos_dibujo[i]->devuelveCentro());
+			change_projection();
+			change_observer();
+		}
+		else{
+			objetos_dibujo[i]->cambiaColor(objetos_dibujo[i]->colorObjeto());
+		}
+	}
+
+
 }
 
 void Escena::ratonMovido(int x, int y){

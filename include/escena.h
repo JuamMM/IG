@@ -77,10 +77,12 @@ class Escena
 	bool beta_pulsada = false;
 
 	std::vector<Camara> camaras;
+	std::vector<Malla3D*> objetos_dibujo;
 
 	bool raton_pulsado=false;
 	int x_mov=0;
 	int y_mov=0;
+
    public:
 
     Escena();
@@ -98,6 +100,9 @@ class Escena
 
 	void clickRaton(int boton, int estado, int x, int y);
 	void ratonMovido(int x, int y);
+
+	void dibujaSeleccion();
+	void Seleccion(int x, int y);
 
 };
 #endif

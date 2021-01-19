@@ -222,9 +222,10 @@ void Malla3D::draw(char modo, bool dibujar_Ajedrez)
 }
 
 void Malla3D::cambiaColor(Tupla3f color){
-	for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
-		(*it) = color;
-	}
+
+		for(auto it = c_inmediato.begin(); it != c_inmediato.end(); it++){
+			(*it) = color;
+		}
 }
 
 void Malla3D::calculaNormales(){
@@ -290,4 +291,15 @@ void Malla3D::calcularCentro(){
 
 Tupla3f Malla3D::devuelveCentro(){
 	return centro;
+}
+
+void Malla3D::aplicarColorSeleccion(){
+	if(seleccionado){
+		seleccionado = false;
+		cambiaColor(inmediato);
+	}
+	else{
+		seleccionado = true;
+		cambiaColor({1,1,0});
+	}
 }

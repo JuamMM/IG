@@ -51,5 +51,6 @@ Cubo::Cubo(float lado)
 		(*it) =diferido;
 	}
 	calculaNormales();
+	tipo = CUBO;
 
 }

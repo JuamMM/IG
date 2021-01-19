@@ -69,6 +69,11 @@ void girar(float x, float y);
 void girarObjeto(float x, float y);
 
 void asignarObjeto(objeto asig);
+
+objeto MirandoA(){
+	return mirar;
+}
+
 };
 
 #endif

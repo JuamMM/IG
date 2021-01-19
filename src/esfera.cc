@@ -28,6 +28,8 @@ Esfera::Esfera(int num_instancias, int radio, bool tapas){
 	calculaNormales();
 	calcularTextura('E');
 	calcularCentro();
+
+	tipo = ESFERA;
 }
 
 void Esfera::crearPerfil(int radio){
