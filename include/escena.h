@@ -34,7 +34,7 @@ class Escena
    GLfloat Width, Height, Front_plane, Back_plane;
 
     // Transformación de cámara
-	void change_projection();
+	void change_projection(/*const float ratio_xyi*/);
 	void change_observer();
 
 	void Colores(Tupla3f nuevo_color);
@@ -82,6 +82,8 @@ class Escena
 	bool raton_pulsado=false;
 	int x_mov=0;
 	int y_mov=0;
+
+	void pintaSeleccion();
 
    public:
 

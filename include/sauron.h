@@ -8,7 +8,7 @@
 #include "material.h"
 #include "corona.h"
 
-class Sauron{
+class Sauron:public Malla3D{
 	private:
 		Esfera * cornea = nullptr;
 		Esfera * ojo = nullptr;
@@ -88,6 +88,13 @@ class Sauron{
 			corona_mueve = !corona_mueve;
 		}
 
+		Tupla3f devuelveCentro(){
+			return cuerpo->devuelveCentro();
+		}
+
+		Tupla3f colorObjeto(){
+			return base->colorObjeto();
+		}
 };
 
 #endif

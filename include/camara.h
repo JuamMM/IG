@@ -55,6 +55,14 @@ void setDerecha(const float derecha){
 	this->derecha = derecha;
 }
 
+float getTop(){
+	return top;
+}
+
+float getAbajo(){
+	return abajo;
+}
+
 // Cambiamos la tupla at para que la cámara apunte a unas nuevas coordenadas
 void setEn(const Tupla3f enfoque){
 	en = enfoque;

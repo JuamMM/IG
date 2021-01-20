@@ -23,6 +23,7 @@ Tupla3f rojo({1,0,0});
 Tupla3f verde({0,1,0});
 Tupla3f azul({0,0,1});
 Tupla3f cian({0,1,1});
+Tupla3f mn({2,1,1});
 
 Escena::Escena()
 {
@@ -93,23 +94,20 @@ Escena::Escena()
 	camaras.push_back(cam4);
 	camaras.push_back(cam5);
 
-	for(int i=0;i< camaras.size();i++){
-		camaras[i].setIzquierda(75);
-		camaras[i].setDerecha(-75);
-		camaras[i].setAbajo(-75);
-		camaras[i].setTop(75);
-	}
 	esfera->ajustaCentro({40,0,-30});
 	cubo->ajustaCentro({0,-50,0});
 	peon2->ajustaCentro({30,0,0});
 	tetraedro->ajustaCentro({20,30,0});
+	cilindro->ajustaCentro({0,0,-30});
 
 	peon2->cambiaColorInmediato(verde);
 	tetraedro->cambiaColorInmediato(azul);
 	esfera->cambiaColorInmediato(rojo);
 	cilindro->cambiaColorInmediato(cian);
+	sauron->cambiaColorInmediato(mn);
 
 	peon2->tipo = PEON;
+	sauron->tipo = SAURON;
 	//sauron->cambiaColorInmediato(morado);
 	//
 	objetos_dibujo.push_back(cubo);
@@ -117,6 +115,7 @@ Escena::Escena()
 	objetos_dibujo.push_back(esfera);
 	objetos_dibujo.push_back(cilindro);
 	objetos_dibujo.push_back(peon2);
+	objetos_dibujo.push_back(sauron);
 }
 
 //**************************************************************************
@@ -154,6 +153,12 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	cubo->cambiaEstado();
 	lata->cambiaEstado();
 
+	for(int i=0;i< camaras.size();i++){
+		camaras[i].setIzquierda(-Width);
+		camaras[i].setDerecha(Width);
+		camaras[i].setAbajo(-Height);
+		camaras[i].setTop(Height);
+	}
 
 	std::cout<<"Pulsa H para recibir a ayuda"<<std::endl;
 }
@@ -303,8 +308,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else if(modoMenu == CAMARA){
 				cout<<"Cambiando a camara 2"<<endl;
 				camara_activa = 2;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			else {
 				cout<<"Tecla no válida"<<endl;
@@ -412,8 +416,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			if(modoMenu == CAMARA){
 				cout<<"Cambiando a Cámara 0"<<endl;
 				camara_activa = 0;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			break;
 		case '1' :
@@ -432,8 +435,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			else if(modoMenu == CAMARA){
 				cout<<"Cambiando a camara 1"<<endl;
 				camara_activa = 1;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			break;
 		case	'<':
@@ -458,30 +460,27 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			if(modoMenu ==CAMARA){
 				cout<<"cambiando a camara 3"<<endl;
 				camara_activa =3;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			break;
 		case '4':
 			if(modoMenu ==CAMARA){
 				cout<<"cambiando a camara 4"<<endl;
 				camara_activa =4;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			break;
 		case '5':
 			if(modoMenu ==CAMARA){
 				cout<<"cambiando a camara 5"<<endl;
 				camara_activa =5;
-				change_projection();
-				change_observer();
+				pintaSeleccion();
 			}
 			break;
 		case '+':
 			if(modoMenu == CAMARA){
 				cout<<"Aumentando zoom camara "<<camara_activa<<endl;
-				camaras[camara_activa].zoom(1.5);
+				camaras[camara_activa].zoom(0.8);
 				change_projection();
 				change_observer();
 			}
@@ -489,7 +488,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		case '-':
 			if(modoMenu == CAMARA){
 				cout<<"Decrementando zoom camara "<<camara_activa<<endl;
-				camaras[camara_activa].zoom(0.5);
+				camaras[camara_activa].zoom(1.2);
 				change_projection();
 				change_observer();
 			}
@@ -574,6 +573,11 @@ void Escena::redimensionar( int newWidth, int newHeight )
 {
    Width  = newWidth/10;
    Height = newHeight/10;
+	float ratio = (float)newWidth/(float)newHeight;
+	for(int i=0; i<camaras.size(); i++){
+		camaras[i].setIzquierda(camaras[i].getAbajo()*ratio);
+		camaras[i].setDerecha(camaras[i].getTop()*ratio);
+	}
    change_projection( );
    glViewport( 0, 0, newWidth, newHeight );
 }
@@ -646,20 +650,33 @@ void Escena::Seleccion(int x, int y){
 	else if(cilindro->colorObjeto() == color){
 		camaras[camara_activa].asignaObjeto(CILINDRO);
 	}
+	else if(sauron->colorObjeto() == color){
+		camaras[camara_activa].asignaObjeto(SAURON);
+	}
 
+	pintaSeleccion();
+
+
+	glEnable(GL_DITHER);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
+
+
+}
+
+void Escena::pintaSeleccion(){
 	for(int i=0; i<objetos_dibujo.size(); i++){
-		if(objetos_dibujo[i]->tipo == camaras[camara_activa].MirandoA()){
+		if(objetos_dibujo[i]->tipo == camaras[camara_activa].MirandoA() && camaras[camara_activa].MirandoA() != NINGUNO){
 			objetos_dibujo[i]->cambiaColor(amarillo);
 
 			camaras[camara_activa].setEn(objetos_dibujo[i]->devuelveCentro());
-			change_projection();
-			change_observer();
 		}
 		else{
 			objetos_dibujo[i]->cambiaColor(objetos_dibujo[i]->colorObjeto());
 		}
 	}
-
+	change_projection();
+	change_observer();
 
 }
 
